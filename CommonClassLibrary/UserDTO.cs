@@ -8,6 +8,11 @@ namespace CommonClassLibrary
 {
     internal class UserDTO
     {
+        /// <summary>
+        /// The ID of the user. This is the Primary key and should be unique (required)
+        /// </summary>
+        public int UserId { get; set; } //primary key
+
 
     }
 }
