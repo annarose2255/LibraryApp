@@ -32,6 +32,32 @@ namespace DatabasesClassLibrary
             }
             
         }
+        public bool removeUser(UserDTO user)
+        {
+            if (Users.Remove(user)) //check that it added it
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+        public bool removeUserByID(int id)
+        {
+            UserDTO user = getUser(id);
+            if (user != null)
+            {
+                return Users.Remove(user);
+
+            }
+            else
+            {
+                return false;
+            }
+            
+        }
         //add, remove (delete), editmethod for fields, get user 
 
         public UserDTO getUser(int id)

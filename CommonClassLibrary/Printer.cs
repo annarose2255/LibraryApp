@@ -67,22 +67,6 @@ namespace CommonClassLibrary
             Console.WriteLine("----------------------------");
         }
 
-        //NEED TO EDIT WHEN HAVE ROLES LIST 
-        public static void printAllRoles(List<RoleDTO> rolesList)
-        {
-            foreach (RoleDTO role in rolesList)
-            {
-                printRole(role);
-            }
-        }
-        //NEED TO EDIT WHEN HAVE Users LIST 
-        public static void printAllUsers(List<UserDTO> userList)
-        {
-            for (int numUser = 0; numUser < userList.Count; numUser++)
-            {
-                Console.WriteLine(String.Format("User {0}: {1}", numUser + 1, userList[numUser].UserName));
-            }
-            
-        }
+        
     }
 }
