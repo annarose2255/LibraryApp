@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="AllPrinter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RolesDatabase.cs" />
     <Compile Include="UsersDatabase.cs" />
   </ItemGroup>
   <ItemGroup>

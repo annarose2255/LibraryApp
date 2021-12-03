@@ -105,22 +105,25 @@ namespace DatabasesClassLibrary
                         case 0:
                             Console.WriteLine("Please enter new First Name: ");
                             string newFirstName = Console.ReadLine().Trim();
-                            user.FirstName = newFirstName;
+                            editUserFirstName(id, newFirstName);
+                            //user.FirstName = newFirstName;
                             break;
                         case 1:
                             Console.WriteLine("Please enter new Last Name: ");
                             string newLastName = Console.ReadLine().Trim();
-                            user.LastName = newLastName;
+                            editUserLastName(id, newLastName);
+                            //user.LastName = newLastName;
                             break;
                         case 2:
                             Console.WriteLine("Please enter new Username: ");
                             string newUserName = Console.ReadLine().Trim();
-                            user.FirstName = newUserName;
+                            editUserUserName(id, newUserName);
+                            //user.FirstName = newUserName;
                             break;
                         case 3:
                             Console.WriteLine("Please enter new Password: ");
                             string newPassword = Console.ReadLine().Trim();
-                            user.FirstName = newPassword;
+                            editUserPassword(id, newPassword);
                             break;
                         case 4: //role
                             do { //for error handling 
@@ -143,7 +146,8 @@ namespace DatabasesClassLibrary
                                         Console.WriteLine("Please enter the role's id: ");
                                         string newRoleID = Console.ReadLine().Trim();
                                         int roleID = Convert.ToInt32(newRoleID);
-                                        user.RoleID = roleID;
+                                        editUserRoleExistingRole(id, roleID);
+                                        //user.RoleID = roleID;
                                         break;
                                     case 1:
                                         //!!!!make creation class/method!!!!!!
@@ -170,7 +174,124 @@ namespace DatabasesClassLibrary
             {
                 return false; 
             }
-           
+        }
+        /// <summary>
+        /// method to edit the given user's id First name.
+        /// </summary>
+        /// <param name="id">Id of the user to edit</param>
+        /// <param name="newFirstName"> New first name</param>
+        /// <returns>true if the name was edited. False if the user's id does not exist</returns>
+        public bool editUserFirstName(int id, string newFirstName)
+        {
+            UserDTO user = getUser(id);
+            if (user == null)
+            {
+                return false;
+            }
+            else
+            {
+                user.FirstName = newFirstName;
+                return true;
+            }
+        }
+        /// <summary>
+        /// method to edit the given user's id Last name.
+        /// </summary>
+        /// <param name="id">id of user toe dit</param>
+        /// <param name="newLastName">new last name</param>
+        /// <returns>true if the name was edited. False if the user's id does not exist</returns>
+        public bool editUserLastName(int id, string newLastName)
+        {
+            UserDTO user = getUser(id);
+            if (user == null)
+            {
+                return false;
+            }
+            else
+            {
+                user.LastName = newLastName;
+                return true;
+            }
+        }
+        /// <summary>
+        /// Method to edit the given user's username.
+        /// </summary>
+        /// <param name="id">id of user</param>
+        /// <param name="newUsername">new username</param>
+        /// <returns>true if the name was edited. False if the user's id does not exist</returns>
+        public bool editUserUserName(int id, string newUsername)
+        {
+            UserDTO user = getUser(id);
+            if (user == null)
+            {
+                return false;
+            }
+            else
+            {
+                user.UserName = newUsername;
+                return true;
+            }
+        }
+        /// <summary>
+        /// Method to edit given user's password
+        /// </summary>
+        /// <param name="id">id of user</param>
+        /// <param name="newPassword">new password</param>
+        /// <returns>true if the name was edited. False if the user's id does not exist</returns>
+        public bool editUserPassword(int id, string newPassword)
+        {
+            UserDTO user = getUser(id);
+            if (user == null)
+            {
+                return false;
+            }
+            else
+            {
+                user.Password = newPassword;
+                return true;
+            }
+        }
+        /// <summary>
+        /// Method to edit the roleID of user
+        /// </summary>
+        /// <param name="userId">id of user</param>
+        /// <param name="newRoleId">role id to place</param>
+        /// <returns>true if the roleID was edited. False if the user's id does not exist</returns>
+        public bool editUserRoleExistingRole(int userId, int newRoleId)
+        {
+            UserDTO user = getUser(userId);
+            if (user == null)
+            {
+                return false;
+            }
+            else
+            {
+                user.RoleID = newRoleId;
+                return true;
+            }
+        }
+
+
+
+        //POSSIBLE MAY NOT USE 
+        /// <summary>
+        /// Method to create a new role to add its id to the user 
+        /// </summary>
+        /// <param name="userId">id of user</param>
+        /// <returns>true if the roleID was edited. False if the user's id does not exist</returns>
+        public bool editUserRoleNewRole(int userId)
+        {
+            UserDTO user = getUser(userId);
+            if (user == null)
+            {
+                return false;
+            }
+            else
+            {
+                RoleDTO r = Creator.makeNewRole();
+                user.RoleID = r.RoleID;
+                return true;
+            }
         }
     }
 }

@@ -64,6 +64,24 @@ namespace UnitTestLibraryApp
             //Assert
             Assert.AreEqual(expected, result);
         }
+        [TestMethod]
+        public void TestEditUserFirstNameFromDatabase()
+        {
+            //arrange
+            UserDTO user = new UserDTO(1, "HiyaBoys21", "1234Password");
+            user.UserId = 1;
+            UsersDatabase t = new UsersDatabase();
+            int expected = 1;
+
+            //act
+            t.addUser(user);
+            t.editUser(1);
+
+            int result = t.Users.Count;
+
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
 
     }
 }
