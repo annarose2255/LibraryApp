@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CommonClassLibrary
 {
-    internal class RoleDTO
+    public class RoleDTO
     {
         /// <summary>
         /// The role's ID. This is the Primary key - should be unqiue (required)

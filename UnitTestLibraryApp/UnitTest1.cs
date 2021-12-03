@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using CommonClassLibrary;
 
 namespace UnitTestLibraryApp
 {
@@ -7,8 +8,12 @@ namespace UnitTestLibraryApp
     public class UnitTest1
     {
         [TestMethod]
-        public void TestMethod1()
+        public void TestPrintProfile_NoName_NoRole()
         {
+            UserDTO user = new UserDTO(1, "HiyaBoys21", "1234Password");
+            user.UserId = 1;
+            Printer.printProfile(user);
+
         }
     }
 }

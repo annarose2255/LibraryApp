@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace CommonClassLibrary
 {
-    internal class Printer
+    public class Printer
     {
         /// <summary>
         /// Method to print the user's (<paramref name="user"/>) profile. Will list the user's first and last name, username, password, and role
         /// </summary>
         /// <param name="user"> The User to print</param>
-        public void printProfile(UserDTO user)
+        public static void printProfile(UserDTO user)
         {
             Console.WriteLine("----------------------------");
             if (user.FirstName != null || user.LastName != null) //if they have entered either a first or last name
@@ -36,13 +36,13 @@ namespace CommonClassLibrary
             }
             Console.WriteLine("Username: "+user.UserName);
             Console.WriteLine("Password: " + user.Password);
-            if (user.RoleID != null)
+            if (user.RoleID == -1) //no set role
             {
-                Console.WriteLine("Role: " ); //need to add function to get role then call the print role method
+                Console.WriteLine("Role: Not Set/Added");
             }
             else
             {
-                Console.WriteLine("Role: Not Set/Added");
+                Console.WriteLine("Role: "); //need to add function to get role then call the print role method
             }
             Console.WriteLine("----------------------------");
         }
@@ -51,7 +51,7 @@ namespace CommonClassLibrary
         /// Method to print a given role's (<paramref name="role"/>) name and description
         /// </summary>
         /// <param name="role">The role to print</param>
-        public void printRole(RoleDTO role)
+        public static void printRole(RoleDTO role)
         {
             Console.WriteLine("----------------------------");
             Console.WriteLine("Role Name: "+role.RoleName);
@@ -67,7 +67,7 @@ namespace CommonClassLibrary
         }
 
         //NEED TO EDIT WHEN HAVE ROLES LIST 
-        public void printAllRoles(List<RoleDTO> rolesList)
+        public static void printAllRoles(List<RoleDTO> rolesList)
         {
             foreach (RoleDTO role in rolesList)
             {
@@ -75,7 +75,7 @@ namespace CommonClassLibrary
             }
         }
         //NEED TO EDIT WHEN HAVE Users LIST 
-        public void printAllUsers(List<UserDTO> userList)
+        public static void printAllUsers(List<UserDTO> userList)
         {
             for (int numUser = 0; numUser < userList.Count; numUser++)
             {

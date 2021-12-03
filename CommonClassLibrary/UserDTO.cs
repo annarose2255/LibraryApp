@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CommonClassLibrary
 {
-    internal class UserDTO
+    public class UserDTO
     {
         /// <summary>
         /// The ID of the user. This is the Primary key and should be unique (required)
@@ -29,7 +29,7 @@ namespace CommonClassLibrary
         /// </summary>
         public string Password { get; set; } //password for user
         /// <summary>
-        /// RoleID. Forgien key to RoleDTO
+        /// RoleID. Forgien key to RoleDTO. -1 means no set role
         /// </summary>
         public int RoleID { get; set; }
 
@@ -39,12 +39,14 @@ namespace CommonClassLibrary
             UserId = 0;
             UserName = "";
             Password = "";
+            RoleID = -1;
         }
         public UserDTO(int userid, string username, string password)
         {
             UserId =userid;
             UserName =username;
             Password =password;
+            RoleID = -1;
         }
         public UserDTO(int userid, string username, string password, string firstname, string lastname)
         {
@@ -53,6 +55,7 @@ namespace CommonClassLibrary
             Password = password;
             FirstName = firstname;
             LastName = lastname;
+            RoleID = -1;
         }
 
     }
