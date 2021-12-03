@@ -11,20 +11,20 @@ namespace DatabasesClassLibrary
     {
 
 
-        public static void printAllUsers(HashSet<UserDTO> listOfUsers)
+        public static void printAllUsers(UsersDatabase t)
         {
-            for (int numUser = 0; numUser < listOfUsers.Count; numUser++)
+            for (int numUser = 0; numUser < t.Users.Count; numUser++)
             {
-                Console.WriteLine(String.Format("User {0}: {1}", numUser + 1, listOfUsers.ElementAt(numUser).UserName));
+                Console.WriteLine(String.Format("User {0}: {1}", numUser + 1, t.Users.ElementAt(numUser).UserName));
             }
 
         }
-        public static void printAllUserProfiles(HashSet<UserDTO> listOfUsers)
+        public static void printAllUserProfiles(UsersDatabase t)
         {
-            for (int numUser = 0; numUser < listOfUsers.Count; numUser++)
+            for (int numUser = 0; numUser < t.Users.Count; numUser++)
             {
                 Console.WriteLine(String.Format("User {0}:", numUser + 1 ));
-                Printer.printProfile(listOfUsers.ElementAt(numUser));
+                Printer.printProfile(t.Users.ElementAt(numUser));
             }
 
         }

@@ -34,6 +34,19 @@ namespace UnitTestLibraryApp
             Assert.AreEqual(expected, result);
         }
         [TestMethod]
+        public void TestPrintAllUsers()
+        {
+            //arrange
+            UserDTO user = new UserDTO(1, "HiyaBoys21", "1234Password");
+            //user.UserId = 1;
+            UsersDatabase t = new UsersDatabase();
+            t.addUser(user);
+
+            //act
+            AllPrinter.printAllUsers(t); 
+            //Assert
+        }
+        [TestMethod]
         public void Testremove1UserByIDFromDatabase()
         {
             //arrange
