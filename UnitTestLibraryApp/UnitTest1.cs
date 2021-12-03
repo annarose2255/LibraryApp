@@ -10,10 +10,13 @@ namespace UnitTestLibraryApp
         [TestMethod]
         public void TestPrintProfile_NoName_NoRole()
         {
+            //arrange
             UserDTO user = new UserDTO(1, "HiyaBoys21", "1234Password");
             user.UserId = 1;
+            //act
             Printer.printProfile(user);
-
+            //Assert
         }
+
     }
 }

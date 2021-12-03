@@ -63,6 +63,7 @@ namespace CommonClassLibrary
             {
                 Console.WriteLine("Role Description: Not Defined");
             }
+            Console.WriteLine("Role ID: " + role.RoleID);
             Console.WriteLine("----------------------------");
         }
 
