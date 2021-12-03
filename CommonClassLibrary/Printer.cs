@@ -47,15 +47,6 @@ namespace CommonClassLibrary
             Console.WriteLine("----------------------------");
         }
 
-        //NEED TO WRITE WHEN HAVE ROLES LIST 
-        public void printAllRoles(List<RoleDTO> rolesList) 
-        {
-            foreach (RoleDTO role in rolesList)
-            {
-                printRole(role);
-            }
-        } 
-
         /// <summary>
         /// Method to print a given role's (<paramref name="role"/>) name and description
         /// </summary>
@@ -71,6 +62,24 @@ namespace CommonClassLibrary
             {
                 Console.WriteLine("Role Description: Not Defined");
             }
+        }
+
+        //NEED TO EDIT WHEN HAVE ROLES LIST 
+        public void printAllRoles(List<RoleDTO> rolesList)
+        {
+            foreach (RoleDTO role in rolesList)
+            {
+                printRole(role);
+            }
+        }
+        //NEED TO EDIT WHEN HAVE Users LIST 
+        public void printAllUsers(List<UserDTO> userList)
+        {
+            for (int numUser = 0; numUser < userList.Count; numUser++)
+            {
+                Console.WriteLine(String.Format("User {0}: {1}", numUser + 1, userList[numUser].UserName));
+            }
+            
         }
     }
 }
