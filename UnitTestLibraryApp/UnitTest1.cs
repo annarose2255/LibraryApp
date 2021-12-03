@@ -69,19 +69,24 @@ namespace UnitTestLibraryApp
         {
             //arrange
             UserDTO user = new UserDTO(1, "HiyaBoys21", "1234Password");
-            user.UserId = 1;
+            //user.UserId = 1;
             UsersDatabase t = new UsersDatabase();
-            int expected = 1;
+            int expected = 2;
+            AllPrinter.printAllUserProfiles(t);
 
             //act
             t.addUser(user);
-            t.editUser(1);
+            t.editUserUserName(1, "HiyaGirls61");
+            //t.editUserUsername(1);
+
+            AllPrinter.printAllUserProfiles(t);
 
             int result = t.Users.Count;
 
             //Assert
             Assert.AreEqual(expected, result);
         }
+
 
     }
 }

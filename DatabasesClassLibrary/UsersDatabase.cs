@@ -17,7 +17,7 @@ namespace DatabasesClassLibrary
         public UsersDatabase()
         {
             Users = new HashSet<UserDTO>();
-            Users.Add(new UserDTO(1, "Guest", "Guest")); //add a guest user since the database should have a guest user
+            Users.Add(new UserDTO(0, "Guest", "Guest")); //add a guest user since the database should have a guest user
         }
 
         public bool addUser(UserDTO user)
@@ -66,6 +66,8 @@ namespace DatabasesClassLibrary
             {
                 if (user.UserId == id)
                 {
+                    //Console.WriteLine("get method");
+                    Printer.printProfile(user);
                     return user;
                 }
             }
