@@ -19,7 +19,7 @@ namespace CommonClassLibrary
             {
                 if (user.FirstName != null && user.LastName != null)
                 {
-                    Console.WriteLine("Name: " + user.FirstName, user.LastName);
+                    Console.WriteLine("Name: " + user.FirstName +" "+ user.LastName);
                 }
                 else if (user.FirstName != null)
                 {
@@ -67,6 +67,9 @@ namespace CommonClassLibrary
             Console.WriteLine("----------------------------");
         }
 
+        /// <summary>
+        /// Method to print the main menu of the program
+        /// </summary>
         public static void mainMenu()
         {
             Console.WriteLine("Welcome! Please enter one of the following: ");
@@ -76,7 +79,7 @@ namespace CommonClassLibrary
             Console.ResetColor();
             Console.WriteLine(" to login as a guest");
             //register
-            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.Write("\tr");
             Console.ResetColor();
             Console.WriteLine(" to register as a new user");
@@ -94,10 +97,12 @@ namespace CommonClassLibrary
 
 
         }
-
+        /// <summary>
+        /// Method to print the login menu
+        /// </summary>
         public static void loggedInMenu()
         {
-            Console.WriteLine("You have successfully logged in! Please enter one of the following: ");
+            Console.WriteLine("Please enter one of the following: ");
 
             //print profile
             Console.ForegroundColor = ConsoleColor.DarkYellow;

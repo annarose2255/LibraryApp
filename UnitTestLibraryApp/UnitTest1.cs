@@ -86,6 +86,26 @@ namespace UnitTestLibraryApp
             //Assert
             Assert.AreEqual(expected, result);
         }
+        [TestMethod]
+        public void TestGetNewUserID()
+        {
+            //arrange
+            UserDTO user = new UserDTO(1, "HiyaBoys21", "1234Password");
+            UserDTO user2 = new UserDTO(2, "Hiyagirls21", "1234Password");
+            UsersDatabase t = new UsersDatabase();
+            int expected = 3;
+
+
+            //act
+            t.addUser(user);
+            t.addUser(user2);
+            //AllPrinter.printAllUserProfiles(t);
+
+            int result = t.createNewUserId();
+
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
 
 
     }

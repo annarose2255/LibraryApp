@@ -77,8 +77,6 @@ namespace DatabasesClassLibrary
             {
                 if (user.UserId == id)
                 {
-                    //Console.WriteLine("get method");
-                    Printer.printProfile(user);
                     return user;
                 }
             }
@@ -96,6 +94,7 @@ namespace DatabasesClassLibrary
                     bool notMadeGoodChoice = false;
                     do //for error handleing
                     {
+                        notMadeGoodChoice = false;
                         Console.WriteLine("What would you like to edit? please enter number of field. " +
                     "\n 0: First Name, 1: Last name, 2: Username, 3: Password, 4: Role");
                         string strChoice = Console.ReadLine().Trim();
@@ -109,9 +108,12 @@ namespace DatabasesClassLibrary
                         }
                         catch (Exception ex)
                         {
+                            Console.ForegroundColor = ConsoleColor.Red;
                             System.Console.WriteLine("ERROR: Did not enter one of the given choices!");
+                            Console.ResetColor();
                             notMadeGoodChoice = true;
                         }
+                        
                     } while (notMadeGoodChoice);
                     switch (choice)
                     {
@@ -119,7 +121,7 @@ namespace DatabasesClassLibrary
                             Console.WriteLine("Please enter new First Name: ");
                             string newFirstName = Console.ReadLine().Trim();
                             editUserFirstName(id, newFirstName);
-                            //user.FirstName = newFirstName;
+
                             break;
                         case 1:
                             Console.WriteLine("Please enter new Last Name: ");
@@ -128,11 +130,23 @@ namespace DatabasesClassLibrary
                             //user.LastName = newLastName;
                             break;
                         case 2:
-                            Console.WriteLine("Please enter new Username: ");
-                            string newUserName = Console.ReadLine().Trim();
-                            editUserUserName(id, newUserName);
-                            //user.FirstName = newUserName;
+                            bool goodUsername = false;
+                            do
+                            {
+                                //goodUsername = false;
+                                Console.WriteLine("Please enter new Username: ");
+                                string newUserName = Console.ReadLine().Trim();
+                                if (editUserUserName(id, newUserName))
+                                {
+                                    goodUsername = true;
+                                }
+                                else
+                                {
+                                   goodUsername = false;
+                                }
+                            } while (!goodUsername);
                             break;
+
                         case 3:
                             Console.WriteLine("Please enter new Password: ");
                             string newPassword = Console.ReadLine().Trim();
@@ -175,11 +189,11 @@ namespace DatabasesClassLibrary
                                 notMadeGoodChoice = true; //repeat the loop
                             }
                             } while(notMadeGoodChoice);
-                            break;
+                            break; //???
                     }
-                Console.WriteLine("Would you like to edit another field? if so, type 'edit'");
+                Console.WriteLine("Would you like to edit another field? if so, type 'yes'");
                  edit = Console.ReadLine().Trim().ToLower();
-                } while (edit == "true");
+                } while (edit == "yes");
                 return true;
                 
             }
@@ -204,6 +218,7 @@ namespace DatabasesClassLibrary
             else
             {
                 user.FirstName = newFirstName;
+                Printer.printProfile(user);
                 return true;
             }
         }
@@ -223,6 +238,7 @@ namespace DatabasesClassLibrary
             else
             {
                 user.LastName = newLastName;
+                Printer.printProfile(user);
                 return true;
             }
         }
@@ -241,8 +257,17 @@ namespace DatabasesClassLibrary
             }
             else
             {
-                user.UserName = newUsername;
-                return true;
+                if (isExistingUsername(newUsername))
+                {
+                    return false;
+                }
+                else
+                {
+                    user.UserName = newUsername;
+                    Printer.printProfile(user);
+                    return true;
+                }
+                
             }
         }
         /// <summary>
@@ -261,6 +286,7 @@ namespace DatabasesClassLibrary
             else
             {
                 user.Password = newPassword;
+                Printer.printProfile(user);
                 return true;
             }
         }
@@ -339,9 +365,18 @@ namespace DatabasesClassLibrary
                 }
 
             }
+            if (found)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("ERROR! Username already exists.");
+                Console.ResetColor();
+            }
             return found;
         }
-
+        /// <summary>
+        /// Method to create a new user id for the database. 
+        /// </summary>
+        /// <returns>An int that will be a new valid id</returns>
         public int createNewUserId()
         {
             int id = Users.Last().UserId+1; //get the last id in the database and add 1;

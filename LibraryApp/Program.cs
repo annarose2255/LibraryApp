@@ -35,8 +35,9 @@ namespace LibraryApp
                         string username = Console.ReadLine().Trim();
                         if (users.isExistingUsername(username))
                         {
-                            Console.WriteLine("Error! A user already has that username");
-                            break;
+                            //Console.ForegroundColor = ConsoleColor.Red;
+                            //Console.WriteLine("Error! A user already has that username");
+                            //Console.ResetColor();
                         }
                         else
                         {
@@ -56,22 +57,31 @@ namespace LibraryApp
                 }
                 else if (input == "l")
                 {
-                    //code to log in
-                    Console.WriteLine("Please enter your username: ");
-                    string username = Console.ReadLine().Trim();
-                    Console.WriteLine("please enter your password");
-                    string password = Console.ReadLine().Trim();
+                    bool foundUser = false;
+                    do
+                    {
+                        //code to log in
+                        Console.WriteLine("Please enter your username: ");
+                        string username = Console.ReadLine().Trim();
+                        Console.WriteLine("please enter your password");
+                        string password = Console.ReadLine().Trim();
 
-                    UserDTO currentUser = users.findUser(username, password);
-                    if (currentUser != null) //if we could find the user
-                    {
-                        users.currentUser = currentUser;
-                        loggedin = true;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Error! Could not find that User with that Username and Password. Please try logging in again.");
-                    }
+                        UserDTO currentUser = users.findUser(username, password);
+                        if (currentUser != null) //if we could find the user
+                        {
+                            users.currentUser = currentUser;
+                            foundUser = true;
+                            loggedin = true;
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Error! Could not find that User with that Username and Password. Please try logging in again.");
+                            Console.ResetColor();
+                        }
+
+                    } while (!foundUser);
+                    
                     
                 }
                 else if (input == "e")
@@ -80,13 +90,15 @@ namespace LibraryApp
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("ERROR! You have not entered one of the options.");
-                    break;
+                    Console.ResetColor();
                 }
 
                 //logged in options 
                 if (loggedin)
                 {
+                    Console.Write("You have successfully logged in! ");
                     do
                     {
                         Printer.loggedInMenu();
@@ -101,7 +113,9 @@ namespace LibraryApp
                         {
                             if (users.currentUser.UserId == 0)
                             {
+                                Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("Error! You cannot edit the profile of a Guest");
+                                Console.ResetColor();
                             }
                             else
                             {
@@ -121,7 +135,9 @@ namespace LibraryApp
                         //print users
                         else if (loggedInInput == "pu")
                         {
+                            Console.WriteLine("----------------------------");
                             AllPrinter.printAllUsers(users);
+                            Console.WriteLine("----------------------------");
                         }
                         else if (loggedInInput == "o")
                         {
@@ -129,7 +145,10 @@ namespace LibraryApp
                         }
                         else 
                         {
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("ERROR! You have not entered one of the options.");
+                            Console.ResetColor();
+                            
                         }
 
                     } while (loggedin);
