@@ -9,9 +9,15 @@ namespace DatabasesClassLibrary
 {
     public class UsersDatabase
     {
-        //public List<UserDTO> Users;
+        /// <summary>
+        /// Hashset of all the users in the database
+        /// </summary>
         public HashSet<UserDTO> Users;
 
+        /// <summary>
+        /// The current logged in user
+        /// </summary>
+        public UserDTO currentUser;  
 
         //constructor
         public UsersDatabase()

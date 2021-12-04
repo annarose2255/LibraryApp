@@ -85,18 +85,40 @@ namespace CommonClassLibrary
             Console.Write("\tl");
             Console.ResetColor();
             Console.WriteLine(" to login as an existing user");
-            //logout
+
+            //Exit
             Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.Write("\to");
+            Console.Write("\te");
             Console.ResetColor();
-            Console.WriteLine(" to logout");
+            Console.WriteLine(" to exit the program");
+
+
+        }
+
+        public static void loggedInMenu()
+        {
+            Console.WriteLine("You have successfully logged in! Please enter one of the following: ");
+
             //print profile
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.Write("\tpp");
             Console.ResetColor();
             Console.WriteLine(" to print profile");
+
+            //Edit profile
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Write("\te");
+            Console.ResetColor();
+            Console.WriteLine(" to edit your user settings");
+
+            //create new role
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Write("\tcr");
+            Console.ResetColor();
+            Console.WriteLine(" to create a new role");
+
             //print roles
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
             Console.Write("\tpr");
             Console.ResetColor();
             Console.WriteLine(" to print all existing roles");
@@ -106,8 +128,11 @@ namespace CommonClassLibrary
             Console.ResetColor();
             Console.WriteLine(" to print all existing Users");
 
-
-
+            //logout
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.Write("\to");
+            Console.ResetColor();
+            Console.WriteLine(" to logout");
         }
     }
 }
