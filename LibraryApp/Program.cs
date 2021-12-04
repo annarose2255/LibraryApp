@@ -13,7 +13,7 @@ namespace LibraryApp
         static void Main(string[] args)
         {
             UsersDatabase users = new UsersDatabase();
-
+            RolesDatabase roles = new RolesDatabase();
             bool exit = false;
             do
             {
@@ -119,18 +119,61 @@ namespace LibraryApp
                             }
                             else
                             {
-                                users.editUser(users.currentUser.UserId);
+                                users.editUser(users.currentUser.UserId, roles);
                             }
                         }
                         //create new role
                         else if (loggedInInput == "cr")
                         {
+                            roles.createNewRole(roles.createNewRoleId());
+                            AllPrinter.printAllRoles(roles);
                            
+                        }
+                        //Edit role
+                        else if (loggedInInput == "er")
+                        {
+                            bool okRoleID = false;
+                            int inputedRoleId = -1;
+                            do //for error handleing
+                            {
+                                okRoleID = false;
+                                Console.WriteLine("Please enter the id of the role you wish to edit. Type 'list' if you wish to see all the roles.");
+                                string roleEditing = Console.ReadLine().Trim().ToLower();
+                                if (roleEditing == "list")
+                                {
+                                    AllPrinter.printAllRoles(roles);
+                                }
+                                else
+                                {
+                                    try
+                                    {
+                                        inputedRoleId = Convert.ToInt32(roleEditing); //got choice now we can come out of this do while
+                                        RoleDTO foundRole = roles.findRole(inputedRoleId);
+                                        if (inputedRoleId <= -1 || foundRole == null)
+                                        {
+                                            throw new Exception();
+                                        }
+                                        else
+                                        {
+                                            okRoleID=true;
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.ForegroundColor = ConsoleColor.Red;
+                                        System.Console.WriteLine("ERROR: Did not enter a role id that exists!");
+                                        Console.ResetColor();
+                                        okRoleID = false;
+                                    }
+                                }
+                            } while (!okRoleID);
+                            roles.editRole(inputedRoleId);
+
                         }
                         //print roles
                         else if (loggedInInput == "pr")
                         {
-                            //AllPrinter.printAllRoles();
+                            AllPrinter.printAllRoles(roles);
                         }
                         //print users
                         else if (loggedInInput == "pu")

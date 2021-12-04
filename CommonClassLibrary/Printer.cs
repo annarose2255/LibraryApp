@@ -42,6 +42,7 @@ namespace CommonClassLibrary
             }
             else
             {
+
                 Console.WriteLine("Role: "); //need to add function to get role then call the print role method
             }
             Console.WriteLine("----------------------------");
@@ -56,7 +57,7 @@ namespace CommonClassLibrary
             Console.WriteLine("----------------------------");
             Console.WriteLine("Role ID: " + role.RoleID);
             Console.WriteLine("Role Name: "+role.RoleName);
-            if (role.RoleDescription != null)
+            if (role.RoleDescription != null && role.RoleDescription != "")
             {
                 Console.WriteLine("Role Description: "+role.RoleDescription);
             }
@@ -117,10 +118,16 @@ namespace CommonClassLibrary
             Console.WriteLine(" to edit your user settings");
 
             //create new role
-            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.Write("\tcr");
             Console.ResetColor();
             Console.WriteLine(" to create a new role");
+
+            //Edit role
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.Write("\ter");
+            Console.ResetColor();
+            Console.WriteLine(" to edit a role");
 
             //print roles
             Console.ForegroundColor = ConsoleColor.DarkBlue;

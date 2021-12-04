@@ -180,6 +180,39 @@ namespace UnitTestLibraryApp
             //Assert
             Assert.AreEqual(expected, result);
         }
+        [TestMethod]
+        public void TestEditRoleName()
+        {
+            RoleDTO role = new RoleDTO(1, "new");
+            RolesDatabase t = new RolesDatabase();
+            string expected = "edited";
+            Printer.printRole(role);
+
+            t.addRole(role);
+            t.editRoleName(role, "edited");
+            string result = t.findRole(1).RoleName;
+            
+
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
+        [TestMethod]
+        public void TestEditRoleDescription()
+        {
+            RoleDTO role = new RoleDTO(1, "new", "old");
+            RolesDatabase t = new RolesDatabase();
+            string expected = "edited";
+            
+
+            t.addRole(role);
+            t.editRoleDescription(role, "edited");
+            string result = t.findRole(1).RoleDescription;
+            Printer.printRole(role);
+
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
+
 
 
     }

@@ -17,13 +17,18 @@ namespace DatabasesClassLibrary
         /// <summary>
         /// The current logged in user
         /// </summary>
-        public UserDTO currentUser;  
+        public UserDTO currentUser;
+
+        public HashSet<int> RolesIds { get; set; }
+        
+       
 
         //constructor
         public UsersDatabase()
         {
             Users = new HashSet<UserDTO>();
             Users.Add(new UserDTO(0, "Guest", "Guest")); //add a guest user since the database should have a guest user
+            RolesIds = new HashSet<int>();
         }
 
         /// <summary>
@@ -82,7 +87,7 @@ namespace DatabasesClassLibrary
             }
             return null;
         }
-        public bool editUser(int id)
+        public bool editUser(int id, RolesDatabase roles)
         {
             UserDTO user = getUser(id);
             if (user != null)
@@ -163,29 +168,50 @@ namespace DatabasesClassLibrary
                                 string strRoleChoice = Console.ReadLine().Trim();
                                 int roleChoice = Convert.ToInt32(strRoleChoice);
                                 //!!Printer.printAllRoles(); -- will add this method when roles database is made!!
-                                if (roleChoice != 0 || roleChoice != 2) //check that its one of the choices
+                                if (roleChoice < 0 || roleChoice > 1) //check that its one of the choices
                                 {
                                     throw new Exception();
                                 }
                                 switch (roleChoice)
                                 {
                                     case 0:
-                                        Console.WriteLine("Please enter the role's id: ");
-                                        string newRoleID = Console.ReadLine().Trim();
-                                        int roleID = Convert.ToInt32(newRoleID);
-                                        editUserRoleExistingRole(id, roleID);
-                                        //user.RoleID = roleID;
-                                        break;
+                                            bool goodId = false;
+                                            int roleID = -1;
+                                            do //loop for retrying role id
+                                            {
+                                                Console.WriteLine("Please enter the role's id: ");
+                                                string strNewRoleID = Console.ReadLine().Trim();
+                                                try
+                                                {
+                                                    roleID = Convert.ToInt32(strNewRoleID);
+                                                    bool roleIDExists = roles.roleIDExists(roleID);
+                                                    if (!roleIDExists)
+                                                    {
+                                                        throw new Exception();
+                                                    }
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    Console.ForegroundColor = ConsoleColor.Red;
+                                                    System.Console.WriteLine("ERROR: Did not enter a role id that exists!");
+                                                    Console.ResetColor();
+                                                }
+
+                                            } while (!goodId);
+                                            editUserRoleExistingRole(id, roleID);
+                                            break;
                                     case 1:
-                                        //!!!!make creation class/method!!!!!!
-                                        RoleDTO roleDTO = new RoleDTO();
-                                        user.RoleID = roleDTO.RoleID;
-                                        break;
+                                            int newId = roles.createNewRoleId();
+                                            roles.createNewRole(newId);
+                                            editUserRoleExistingRole(id, newId);
+                                            break;
                                 }
                             }
                             catch (Exception ex)
                             {
-                                System.Console.WriteLine("ERROR: Did not enter one of the given choices!");
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("ERROR: Did not enter one of the given choices!");
+                                Console.ResetColor();
                                 notMadeGoodChoice = true; //repeat the loop
                             }
                             } while(notMadeGoodChoice);
@@ -202,6 +228,8 @@ namespace DatabasesClassLibrary
                 return false; 
             }
         }
+        
+
         /// <summary>
         /// method to edit the given user's id First name.
         /// </summary>
