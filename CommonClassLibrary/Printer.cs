@@ -54,6 +54,7 @@ namespace CommonClassLibrary
         public static void printRole(RoleDTO role)
         {
             Console.WriteLine("----------------------------");
+            Console.WriteLine("Role ID: " + role.RoleID);
             Console.WriteLine("Role Name: "+role.RoleName);
             if (role.RoleDescription != null)
             {
@@ -63,7 +64,6 @@ namespace CommonClassLibrary
             {
                 Console.WriteLine("Role Description: Not Defined");
             }
-            Console.WriteLine("Role ID: " + role.RoleID);
             Console.WriteLine("----------------------------");
         }
 

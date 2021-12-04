@@ -135,9 +135,7 @@ namespace LibraryApp
                         //print users
                         else if (loggedInInput == "pu")
                         {
-                            Console.WriteLine("----------------------------");
                             AllPrinter.printAllUsers(users);
-                            Console.WriteLine("----------------------------");
                         }
                         else if (loggedInInput == "o")
                         {

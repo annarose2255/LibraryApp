@@ -379,8 +379,7 @@ namespace DatabasesClassLibrary
         /// <returns>An int that will be a new valid id</returns>
         public int createNewUserId()
         {
-            int id = Users.Last().UserId+1; //get the last id in the database and add 1;
-            return id;
+            return Users.Last().UserId+1; //get the last id in the database and add 1;
         }
     }
 }

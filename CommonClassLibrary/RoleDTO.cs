@@ -14,7 +14,7 @@ namespace CommonClassLibrary
         public int RoleID { get; set; } //primary key
 
         /// <summary>
-        /// Name of the role, Required.
+        /// Name of the role, Required. must be unique
         /// </summary>
         public string RoleName { get; set; } = ""; //guest, admin, ...
 

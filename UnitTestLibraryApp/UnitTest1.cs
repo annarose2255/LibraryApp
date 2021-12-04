@@ -106,6 +106,58 @@ namespace UnitTestLibraryApp
             //Assert
             Assert.AreEqual(expected, result);
         }
+        [TestMethod]
+        public void TestCreateRoleDatabase()
+        {
+
+            RolesDatabase t = new RolesDatabase();
+            int expected = 1;
+
+
+            int result = t.Roles.Count;
+
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
+        [TestMethod]
+        public void TestAddRoleDatabase()
+        {
+            RoleDTO role = new RoleDTO(1, "new");
+            RolesDatabase t = new RolesDatabase();
+            int expected = 2;
+
+            t.addRole(role);
+            int result = t.Roles.Count;
+
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
+        [TestMethod]
+        public void TestGetNewRoleID()
+        {
+            
+            RolesDatabase t = new RolesDatabase();
+            int expected = 1;
+
+            int result = t.createNewRoleId();
+
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
+        [TestMethod]
+        public void TestPrintAllRoles()
+        {
+            RoleDTO role = new RoleDTO(1, "new");
+            RolesDatabase t = new RolesDatabase();
+            int expected = 2;
+
+            t.addRole(role);
+            int result = t.Roles.Count;
+            AllPrinter.printAllRoles(t);
+
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
 
 
     }

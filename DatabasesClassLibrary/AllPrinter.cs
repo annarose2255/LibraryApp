@@ -21,18 +21,20 @@ namespace DatabasesClassLibrary
         }
         public static void printAllUserProfiles(UsersDatabase t)
         {
+            Console.WriteLine("----------------------------");
             for (int numUser = 0; numUser < t.Users.Count; numUser++)
             {
                 Console.WriteLine(String.Format("User {0}:", numUser + 1 ));
                 Printer.printProfile(t.Users.ElementAt(numUser));
             }
+            Console.WriteLine("----------------------------");
 
         }
 
         //NEED TO EDIT WHEN HAVE ROLES LIST 
-        public static void printAllRoles(HashSet<RoleDTO> rolesList)
+        public static void printAllRoles(RolesDatabase t)
         {
-            foreach (RoleDTO role in rolesList)
+            foreach (RoleDTO role in t.Roles)
             {
                 Printer.printRole(role);
             }
