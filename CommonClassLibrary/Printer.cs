@@ -67,6 +67,47 @@ namespace CommonClassLibrary
             Console.WriteLine("----------------------------");
         }
 
-        
+        public static void mainMenu()
+        {
+            Console.WriteLine("Welcome! Please enter one of the following: ");
+            //guest
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            Console.Write("\tg");
+            Console.ResetColor();
+            Console.WriteLine(" to login as a guest");
+            //register
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.Write("\tr");
+            Console.ResetColor();
+            Console.WriteLine(" to register as a new user");
+            //login
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Write("\tl");
+            Console.ResetColor();
+            Console.WriteLine(" to login as an existing user");
+            //logout
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.Write("\to");
+            Console.ResetColor();
+            Console.WriteLine(" to logout");
+            //print profile
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("\tpp");
+            Console.ResetColor();
+            Console.WriteLine(" to print profile");
+            //print roles
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.Write("\tpr");
+            Console.ResetColor();
+            Console.WriteLine(" to print all existing roles");
+            //print users
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.Write("\tpu");
+            Console.ResetColor();
+            Console.WriteLine(" to print all existing Users");
+
+
+
+        }
     }
 }
