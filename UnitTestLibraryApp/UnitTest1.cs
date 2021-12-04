@@ -158,6 +158,28 @@ namespace UnitTestLibraryApp
             //Assert
             Assert.AreEqual(expected, result);
         }
+        [TestMethod]
+        public void TestRoleNameExistsTrue()
+        {
+            RolesDatabase t = new RolesDatabase();
+            bool expected = true;
+
+            bool result = t.roleNameExists("Guest");
+
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
+        [TestMethod]
+        public void TestRoleNameExistsFalse()
+        {
+            RolesDatabase t = new RolesDatabase();
+            bool expected = false;
+
+            bool result = t.roleNameExists("hi");
+
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
 
 
     }
