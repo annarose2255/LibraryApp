@@ -21,7 +21,7 @@ namespace CommonClassLibrary
         /// </summary>
         public string LastName { get; set; }
         /// <summary>
-        /// Username of user - part of login 
+        /// Username of user - part of login. Must be unique
         /// </summary>
         public string UserName { get; set; } //user name of user 
         /// <summary>

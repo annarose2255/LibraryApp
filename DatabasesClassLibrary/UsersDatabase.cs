@@ -26,6 +26,11 @@ namespace DatabasesClassLibrary
             Users.Add(new UserDTO(0, "Guest", "Guest")); //add a guest user since the database should have a guest user
         }
 
+        /// <summary>
+        /// Method to add a user to the database.
+        /// </summary>
+        /// <param name="user">The user to add</param>
+        /// <returns>Returns true if the user was added. Returns false otherwise</returns>
         public bool addUser(UserDTO user)
         {
             if (Users.Add(user)) //check that it added it
@@ -300,6 +305,47 @@ namespace DatabasesClassLibrary
                 user.RoleID = r.RoleID;
                 return true;
             }
+        }
+        /// <summary>
+        /// Method to find a user based on username and password
+        /// </summary>
+        /// <param name="username">possible username of the user</param>
+        /// <param name="password">possible password of the user</param>
+        /// <returns>the found User. If no user is found, returns null.</returns>
+        public UserDTO findUser(string username, string password)
+        {
+            foreach (UserDTO possibleUser in Users)
+            {
+                if (possibleUser.UserName == username && possibleUser.Password == password)
+                {
+                    return possibleUser;
+                }
+            }
+            return null;
+        }
+        /// <summary>
+        /// Method that returns true if there is a user with that username 
+        /// </summary>
+        /// <param name="username">The username to search for</param>
+        /// <returns>True if the username is in the database. False if the username is not in the database</returns>
+        public bool isExistingUsername(string username)
+        {
+            bool found = false;
+            foreach (UserDTO user in Users)
+            {
+                if (user.UserName == username)
+                {
+                    found = true;
+                }
+
+            }
+            return found;
+        }
+
+        public int createNewUserId()
+        {
+            int id = Users.Last().UserId+1; //get the last id in the database and add 1;
+            return id;
         }
     }
 }

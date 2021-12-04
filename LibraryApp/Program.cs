@@ -27,14 +27,52 @@ namespace LibraryApp
                 }
                 else if (input == "r")
                 {
-                    //code to add new user
-                    loggedin = true;
+                    bool register = false;
+                    do
+                    {
+                        //code to add new user
+                        Console.WriteLine("Please enter your Username: ");
+                        string username = Console.ReadLine().Trim();
+                        if (users.isExistingUsername(username))
+                        {
+                            Console.WriteLine("Error! A user already has that username");
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Please enter your Password: ");
+                            string password = Console.ReadLine().Trim();
+                            int id = users.createNewUserId();
+                            UserDTO newUser = new UserDTO(id, username, password);
+                            users.addUser(newUser);
+                            users.currentUser = newUser;
+                            Console.WriteLine("Congrats! You have registered!");
+                            loggedin = true;
+                            register = true;
+                        }
+                    } while (!register);
+                    
 
                 }
                 else if (input == "l")
                 {
                     //code to log in
-                    loggedin= true;
+                    Console.WriteLine("Please enter your username: ");
+                    string username = Console.ReadLine().Trim();
+                    Console.WriteLine("please enter your password");
+                    string password = Console.ReadLine().Trim();
+
+                    UserDTO currentUser = users.findUser(username, password);
+                    if (currentUser != null) //if we could find the user
+                    {
+                        users.currentUser = currentUser;
+                        loggedin = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error! Could not find that User with that Username and Password. Please try logging in again.");
+                    }
+                    
                 }
                 else if (input == "e")
                 {
