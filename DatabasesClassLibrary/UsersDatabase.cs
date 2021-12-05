@@ -126,12 +126,14 @@ namespace DatabasesClassLibrary
                             Console.WriteLine("Please enter new First Name: ");
                             string newFirstName = Console.ReadLine().Trim();
                             editUserFirstName(id, newFirstName);
+                            AllPrinter.printProfile(user, roles);
 
                             break;
                         case 1:
                             Console.WriteLine("Please enter new Last Name: ");
                             string newLastName = Console.ReadLine().Trim();
                             editUserLastName(id, newLastName);
+                            AllPrinter.printProfile(user, roles);
                             //user.LastName = newLastName;
                             break;
                         case 2:
@@ -143,6 +145,7 @@ namespace DatabasesClassLibrary
                                 string newUserName = Console.ReadLine().Trim();
                                 if (editUserUserName(id, newUserName))
                                 {
+                                    AllPrinter.printProfile(user, roles);
                                     goodUsername = true;
                                 }
                                 else
@@ -156,6 +159,7 @@ namespace DatabasesClassLibrary
                             Console.WriteLine("Please enter new Password: ");
                             string newPassword = Console.ReadLine().Trim();
                             editUserPassword(id, newPassword);
+                            AllPrinter.printProfile(user, roles);
                             break;
                         case 4: //role
                             do { //for error handling 
@@ -179,31 +183,43 @@ namespace DatabasesClassLibrary
                                             int roleID = -1;
                                             do //loop for retrying role id
                                             {
-                                                Console.WriteLine("Please enter the role's id: ");
+                                                Console.WriteLine("Please enter the role's id or 'list' to list all the possible roles: ");
                                                 string strNewRoleID = Console.ReadLine().Trim();
-                                                try
+                                                if (strNewRoleID == "list")
                                                 {
-                                                    roleID = Convert.ToInt32(strNewRoleID);
-                                                    bool roleIDExists = roles.roleIDExists(roleID);
-                                                    if (!roleIDExists)
+                                                    AllPrinter.printAllRoles(roles);
+                                                }
+                                                else
+                                                {
+                                                    try
                                                     {
-                                                        throw new Exception();
+                                                        roleID = Convert.ToInt32(strNewRoleID);
+                                                        bool roleIDExists = roles.roleIDExists(roleID);
+                                                        if (!roleIDExists)
+                                                        {
+                                                            goodId = false;
+                                                        }
+                                                        else
+                                                        {
+                                                            goodId = true;
+                                                        }
+                                                    }
+                                                    catch (Exception ex)
+                                                    {
+                                                        Console.ForegroundColor = ConsoleColor.Red;
+                                                        System.Console.WriteLine("ERROR: Did not enter a role id that exists!");
+                                                        Console.ResetColor();
                                                     }
                                                 }
-                                                catch (Exception ex)
-                                                {
-                                                    Console.ForegroundColor = ConsoleColor.Red;
-                                                    System.Console.WriteLine("ERROR: Did not enter a role id that exists!");
-                                                    Console.ResetColor();
-                                                }
-
                                             } while (!goodId);
                                             editUserRoleExistingRole(id, roleID);
+                                            AllPrinter.printProfile(user, roles);
                                             break;
                                     case 1:
                                             int newId = roles.createNewRoleId();
                                             roles.createNewRole(newId);
                                             editUserRoleExistingRole(id, newId);
+                                            AllPrinter.printProfile(user, roles);
                                             break;
                                 }
                             }
@@ -246,7 +262,7 @@ namespace DatabasesClassLibrary
             else
             {
                 user.FirstName = newFirstName;
-                Printer.printProfile(user);
+                
                 return true;
             }
         }
@@ -266,7 +282,6 @@ namespace DatabasesClassLibrary
             else
             {
                 user.LastName = newLastName;
-                Printer.printProfile(user);
                 return true;
             }
         }
@@ -292,7 +307,6 @@ namespace DatabasesClassLibrary
                 else
                 {
                     user.UserName = newUsername;
-                    Printer.printProfile(user);
                     return true;
                 }
                 
@@ -314,7 +328,6 @@ namespace DatabasesClassLibrary
             else
             {
                 user.Password = newPassword;
-                Printer.printProfile(user);
                 return true;
             }
         }

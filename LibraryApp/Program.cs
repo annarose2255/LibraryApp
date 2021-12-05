@@ -106,7 +106,7 @@ namespace LibraryApp
                         //print profile
                         if (loggedInInput == "pp")
                         {
-                            Printer.printProfile(users.currentUser);
+                            AllPrinter.printProfile(users.currentUser, roles);
                         }
                         //edit profile
                         else if (loggedInInput == "e")

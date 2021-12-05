@@ -13,9 +13,10 @@ namespace UnitTestLibraryApp
         {
             //arrange
             UserDTO user = new UserDTO(1, "HiyaBoys21", "1234Password");
+            RolesDatabase r = new RolesDatabase();
             user.UserId = 1;
             //act
-            Printer.printProfile(user);
+            AllPrinter.printProfile(user, r);
             //Assert
         }
         [TestMethod]
@@ -71,15 +72,16 @@ namespace UnitTestLibraryApp
             UserDTO user = new UserDTO(1, "HiyaBoys21", "1234Password");
             //user.UserId = 1;
             UsersDatabase t = new UsersDatabase();
+            RolesDatabase r = new RolesDatabase();
             int expected = 2;
-            AllPrinter.printAllUserProfiles(t);
+            AllPrinter.printAllUserProfiles(t, r);
 
             //act
             t.addUser(user);
             t.editUserUserName(1, "HiyaGirls61");
             //t.editUserUsername(1);
 
-            AllPrinter.printAllUserProfiles(t);
+            AllPrinter.printAllUserProfiles(t, r);
 
             int result = t.Users.Count;
 
