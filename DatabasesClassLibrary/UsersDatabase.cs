@@ -428,5 +428,6 @@ namespace DatabasesClassLibrary
         {
             return Users.Last().UserId+1; //get the last id in the database and add 1;
         }
+        #endregion
     }
 }

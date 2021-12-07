@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CommonClassLibrary;
 using DatabasesClassLibrary;
+using System.Data.SqlClient;
 
 namespace LibraryApp
 {
@@ -15,6 +16,7 @@ namespace LibraryApp
             UsersDatabase users = new UsersDatabase();
             RolesDatabase roles = new RolesDatabase();
             bool exit = false;
+            SqlConnection con = new SqlConnection();
             do
             {
                 bool loggedin = false;

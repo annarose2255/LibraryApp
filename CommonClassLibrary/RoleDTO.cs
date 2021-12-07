@@ -42,5 +42,10 @@ namespace CommonClassLibrary
             RoleName = name;
             RoleDescription = desc;
         }
+        public RoleDTO(string name, string desc)
+        {
+            RoleName = name;
+            RoleDescription = desc;
+        }
     }
 }
