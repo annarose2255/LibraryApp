@@ -6,7 +6,7 @@ using DatabasesClassLibrary;
 namespace UnitTestLibraryApp
 {
     [TestClass]
-    public class UnitTest1
+    public class UnitTestLibraryApp
     {
         [TestMethod]
         public void TestPrintProfile_NoName_NoRole()
