@@ -9,6 +9,7 @@ namespace DatabasesClassLibrary
 {
     public class UsersDatabase
     {
+        #region Fields
         /// <summary>
         /// Hashset of all the users in the database
         /// </summary>
@@ -20,9 +21,11 @@ namespace DatabasesClassLibrary
         public UserDTO currentUser;
 
         public HashSet<int> RolesIds { get; set; }
-        
-       
 
+
+        #endregion
+
+        #region Constructor
         //constructor
         public UsersDatabase()
         {
@@ -30,7 +33,10 @@ namespace DatabasesClassLibrary
             Users.Add(new UserDTO(0, "Guest", "Guest")); //add a guest user since the database should have a guest user
             RolesIds = new HashSet<int>();
         }
+        #endregion
 
+
+        #region Methods
         /// <summary>
         /// Method to add a user to the database.
         /// </summary>
