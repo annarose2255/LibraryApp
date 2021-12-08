@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AllPrinter.cs" />
+    <Compile Include="dboErrorLoggingCommands.cs" />
     <Compile Include="dboRoleCommands.cs" />
     <Compile Include="dboUsersCommands.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
