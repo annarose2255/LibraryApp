@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CommonClassLibrary;
 using DatabasesClassLibrary;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 namespace LibraryApp
 {
@@ -20,6 +21,7 @@ namespace LibraryApp
 
             dboUsersCommands u = new dboUsersCommands();
             dboRoleCommands r = new dboRoleCommands();
+            dboErrorLoggingCommands errorLogging = new dboErrorLoggingCommands();
             int currentUserID = 0;
             do
             {
@@ -37,42 +39,29 @@ namespace LibraryApp
                     bool register = false;
                     do
                     {
-                        //code to add new user
                         Console.WriteLine("Please enter your Username: ");
                         string username = Console.ReadLine().Trim();
+                        Console.WriteLine("Please enter your Password: ");
+                        string password = Console.ReadLine().Trim();
+                        UserDTO newUser = new UserDTO(0, username, password);
 
-                        if (users.isExistingUsername(username))
+
+                        try //see if error from trying to enter name shows up
                         {
-                            //Console.ForegroundColor = ConsoleColor.Red;
-                            //Console.WriteLine("Error! A user already has that username");
-                            //Console.ResetColor();
-                        }
-                        else
-                        {
-                            Console.WriteLine("Please enter your Password: ");
-                            string password = Console.ReadLine().Trim();
-                            int id = users.createNewUserId();
-                            UserDTO newUser = new UserDTO(id, username, password);
-                            try //see if error from trying to enter name shows up
-                            {
-                                u.createUserIntoDb(newUser);
-                                List<object[]> select = u.selectUserByUsernameAndPasswordInDb(username, password);
-                                if (select == null)
-                                {
-                                    throw new Exception("Username and Password Dont Match");
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine("ERROR from database");
-                                Console.WriteLine(ex.Message);
-                            }
-                            users.addUser(newUser);
-                            users.currentUser = newUser;
-                            Console.WriteLine("Congrats! You have registered!");
-                            //currentUserID = ;
+                            u.createUserIntoDb(newUser);
+                            currentUserID = newUser.UserId;
+                            Console.WriteLine(currentUserID);
+                            Console.WriteLine("Congrats! You have registered!"); //if we got here then we have no errors
                             loggedin = true;
                             register = true;
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("ERROR from database");
+                            Console.WriteLine(ex.Message);
+                            Console.ResetColor();
+                            errorLogging.createLogException(ex);
                         }
                        
                     } while (!register);
@@ -90,18 +79,26 @@ namespace LibraryApp
                         Console.WriteLine("please enter your password");
                         string password = Console.ReadLine().Trim();
 
-                        UserDTO currentUser = users.findUser(username, password);
-                        if (currentUser != null) //if we could find the user
+                        try
                         {
-                            users.currentUser = currentUser;
-                            foundUser = true;
+                            List<object[]> select = u.selectUserByUsernameAndPasswordInDb(username, password);
+                            if (select == null)
+                            {
+                                throw new Exception("Username and Password Dont Match");
+                            }
+                            currentUserID = (int) select.ElementAt(0)[0]; //should return user id for this current user
+                            Console.WriteLine(currentUserID);
                             loggedin = true;
+                            foundUser = true;
                         }
-                        else
+                        catch (Exception ex)
                         {
+
                             Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Error! Could not find that User with that Username and Password. Please try logging in again.");
+                            Console.WriteLine("ERROR from database");
+                            Console.WriteLine(ex.Message);
                             Console.ResetColor();
+                            errorLogging.createLogException(ex);
                         }
 
                     } while (!foundUser);

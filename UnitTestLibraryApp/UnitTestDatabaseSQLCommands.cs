@@ -265,5 +265,39 @@ namespace UnitTestLibraryApp
             //int num = c.createUserIntoDb(user);
             Assert.IsNotNull(d);
         }
+
+        [TestMethod]
+        public void TestInsertLogException()
+        {
+            //dboUsersCommands c = new dboUsersCommands(@"Data Source=ANNA-DESKTOP;Initial Catalog=LibraryAppTest;Integrated Security=True");
+            //dboRoleCommands c = new dboRoleCommands();
+            dboErrorLoggingCommands c = new dboErrorLoggingCommands(@"Data Source=ANNA-DESKTOP;Initial Catalog=LibraryAppTest;Integrated Security=True");
+            try
+            {
+                throw new Exception();
+            }
+            catch (Exception ex)
+            {
+                c.createLogException(ex);
+            }
+
+            List<object[]> d = c.selectAllLogErrors();
+            AllPrinter.printAllLoggedErrors(d);
+            //int num = c.createUserIntoDb(user);
+            Assert.IsNotNull(d);
+        }
+
+        [TestMethod]
+        public void TestPrintLogException()
+        {
+            //dboUsersCommands c = new dboUsersCommands(@"Data Source=ANNA-DESKTOP;Initial Catalog=LibraryAppTest;Integrated Security=True");
+            //dboRoleCommands c = new dboRoleCommands();
+            dboErrorLoggingCommands c = new dboErrorLoggingCommands(@"Data Source=ANNA-DESKTOP;Initial Catalog=LibraryAppTest;Integrated Security=True");
+
+            List<object[]> d = c.selectAllLogErrors();
+            AllPrinter.printAllLoggedErrors(d);
+            //int num = c.createUserIntoDb(user);
+            Assert.IsNotNull(d);
+        }
     }
 }

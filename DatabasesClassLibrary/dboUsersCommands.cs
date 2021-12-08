@@ -200,7 +200,7 @@ namespace DatabasesClassLibrary
 
             using (SqlConnection conn = new SqlConnection(_conn))
             {
-                using (SqlCommand _sqlCommand = new SqlCommand("SelectUserandRoleNameByID", conn))
+                using (SqlCommand _sqlCommand = new SqlCommand("SelectUserByUsernameAndPassword", conn))
                 {
                     _sqlCommand.CommandType = CommandType.StoredProcedure;
                     _sqlCommand.CommandTimeout = 30;

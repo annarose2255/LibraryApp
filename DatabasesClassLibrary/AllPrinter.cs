@@ -35,7 +35,7 @@ namespace DatabasesClassLibrary
             Console.WriteLine("----------------------------");
             foreach (object[] values in rows)
             {
-                
+
                 Console.WriteLine("User ID: " + values[0]);
                 Console.WriteLine("User Name: " + values[1]);
                 Console.WriteLine("Password: " + values[2]);
@@ -67,6 +67,22 @@ namespace DatabasesClassLibrary
                     Console.WriteLine("Role: Not set/added");
                 }
 
+                Console.WriteLine("----------------------------");
+
+            }
+        }
+
+        public static void printAllLoggedErrors(List<object[]> rows)
+        {
+            Console.WriteLine("----------------------------");
+            foreach (object[] values in rows)
+            {
+                Console.WriteLine("Error ID: " + values[0]);
+                Console.WriteLine("Stack Trace: " + values[1]);
+                Console.WriteLine("Message: " + values[2]);
+                Console.WriteLine("Source: " + values[3]);
+                Console.WriteLine("LogDate: " + values[5].ToString());
+                
                 Console.WriteLine("----------------------------");
 
             }
