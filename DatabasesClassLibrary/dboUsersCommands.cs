@@ -86,6 +86,7 @@ namespace DatabasesClassLibrary
         }
         #endregion
 
+
         #region User Select
         public List<object[]> selectAllUsersInDb()
         {
@@ -203,6 +204,40 @@ namespace DatabasesClassLibrary
                 {
                     _sqlCommand.CommandType = CommandType.StoredProcedure;
                     _sqlCommand.CommandTimeout = 30;
+
+
+                    conn.Open();
+                    DataTable dt = new DataTable();
+                    SqlDataReader reader = _sqlCommand.ExecuteReader();
+                    List<object[]> rows = new List<object[]>();
+                    while (reader.Read())//read through the db
+                    {
+                        object[] values = new object[6];
+                        reader.GetValues(values); //get the values of the row
+                        rows.Add(values); //add the row's values to the list
+
+                    }
+                    reader.Close();
+
+                    conn.Close();
+                    reader.Close();
+                    return rows;
+
+                }
+            }
+        }
+
+        //DONT KNOW ABOUT THIS!!
+        public List<object[]> selectAllUsersNamesInDb()
+        {
+
+            using (SqlConnection conn = new SqlConnection(_conn))
+            {
+                using (SqlCommand _sqlCommand = new SqlCommand("SelectAllUsers", conn))
+                {
+                    _sqlCommand.CommandType = CommandType.StoredProcedure;
+                    _sqlCommand.CommandTimeout = 30;
+
 
 
                     conn.Open();
@@ -483,190 +518,3 @@ namespace DatabasesClassLibrary
         #endregion
     }
 }
-/*
-
-        #region Role Insert
-        public int createRoleIntoDb(RoleDTO r)
-        {
-
-            using (SqlConnection conn = new SqlConnection(_conn))
-            {
-                using (SqlCommand _sqlCommand = new SqlCommand("InsertRole", conn))
-                {
-                    _sqlCommand.CommandType = CommandType.StoredProcedure;
-                    _sqlCommand.CommandTimeout = 30;
-
-                    SqlParameter _paramRoleName = _sqlCommand.CreateParameter();
-                    _paramRoleName.DbType = DbType.String; //set type
-                    _paramRoleName.ParameterName = "@RoleName"; //set name
-                    _paramRoleName.Value = r.RoleName; //set value 
-                    _sqlCommand.Parameters.Add(_paramRoleName);
-
-                    SqlParameter _paramRoleDesc = _sqlCommand.CreateParameter();
-                    _paramRoleDesc.DbType = DbType.String; //set type
-                    _paramRoleDesc.ParameterName = "@RoleDescription"; //set name
-                    _paramRoleDesc.Value = r.RoleDescription; //set value 
-                    _sqlCommand.Parameters.Add(_paramRoleDesc);
-
-
-                    SqlParameter _paramRoleIDReturn = _sqlCommand.CreateParameter();
-                    _paramRoleIDReturn.DbType = DbType.Int32; //set type
-                    _paramRoleIDReturn.ParameterName = "@ParamOutRoleID"; //set name
-                    var pk = _sqlCommand.Parameters.Add(_paramRoleIDReturn);
-                    _paramRoleIDReturn.Direction = ParameterDirection.Output; //make it output 
-
-                    conn.Open();
-                    _sqlCommand.ExecuteNonQuery(); //call sp
-                    var result = _paramRoleIDReturn.Value; //has auto incremented value returned 
-                    r.RoleID = (int)result;
-                    conn.Close();
-                    return (int)result;
-                }
-            }
-        }
-        #endregion
-
-        #region Role Select
-        public List<object[]> selectAllRolesInDb()
-        {
-
-            using (SqlConnection conn = new SqlConnection(_conn))
-            {
-                using (SqlCommand _sqlCommand = new SqlCommand("SelectAllRoles", conn))
-                {
-                    _sqlCommand.CommandType = CommandType.StoredProcedure;
-                    _sqlCommand.CommandTimeout = 30;
-
-
-
-                    conn.Open();
-                    DataTable dt = new DataTable();
-                    SqlDataReader reader = _sqlCommand.ExecuteReader();
-                    List<object[]> rows = new List<object[]>();
-                    while (reader.Read())//read through the db
-                    {
-                        object[] values = new object[3];
-                        reader.GetValues(values); //get the values of the row
-                        rows.Add(values); //add the row's values to the list
-
-                    }
-                    reader.Close();
-
-                    conn.Close();
-                    reader.Close();
-                    return rows;
-
-                }
-            }
-        }
-        public List<object[]> selectRoleByIDInDb(int roleID)
-        {
-
-            using (SqlConnection conn = new SqlConnection(_conn))
-            {
-                using (SqlCommand _sqlCommand = new SqlCommand("SelectRoleByID", conn))
-                {
-                    _sqlCommand.CommandType = CommandType.StoredProcedure;
-                    _sqlCommand.CommandTimeout = 30;
-
-                    SqlParameter _paramRoleID = _sqlCommand.CreateParameter();
-                    _paramRoleID.DbType = DbType.Int32; //set type
-                    _paramRoleID.ParameterName = "@RoleID"; //set name
-                    _paramRoleID.Value = roleID; //set value 
-                    _sqlCommand.Parameters.Add(_paramRoleID);
-
-
-                    conn.Open();
-                    DataTable dt = new DataTable();
-                    SqlDataReader reader = _sqlCommand.ExecuteReader();
-                    List<object[]> rows = new List<object[]>();
-                    while (reader.Read())//read through the db
-                    {
-                        object[] values = new object[3];
-                        reader.GetValues(values); //get the values of the row
-                        rows.Add(values); //add the row's values to the list
-
-                    }
-                    reader.Close();
-
-                    conn.Close();
-                    return rows;
-
-                }
-            }
-        }
-        #endregion
-
-
-        #region Role Delete
-        public void deleteRoleByIDInDb(int roleId)
-        {
-
-            using (SqlConnection conn = new SqlConnection(_conn))
-            {
-                using (SqlCommand _sqlCommand = new SqlCommand("DeleteRoleByID", conn))
-                {
-                    _sqlCommand.CommandType = CommandType.StoredProcedure;
-                    _sqlCommand.CommandTimeout = 30;
-
-                    SqlParameter _paramRoleID = _sqlCommand.CreateParameter();
-                    _paramRoleID.DbType = DbType.String; //set type
-                    _paramRoleID.ParameterName = "@RoleID"; //set name
-                    _paramRoleID.Value = roleId; //set value 
-                    _sqlCommand.Parameters.Add(_paramRoleID);
-
-                    conn.Open();
-
-                    _sqlCommand.ExecuteNonQuery(); //call sp
-
-                    conn.Close();
-
-
-                }
-            }
-        }
-        #endregion
-
-        #region Role Update
-        public void updateRoleInDb(int roleID, string roleName, string roleDescription)
-        {
-
-            using (SqlConnection conn = new SqlConnection(_conn))
-            {
-                using (SqlCommand _sqlCommand = new SqlCommand("UpdateRole", conn))
-                {
-                    _sqlCommand.CommandType = CommandType.StoredProcedure;
-                    _sqlCommand.CommandTimeout = 30;
-
-                    SqlParameter _paramRoleID = _sqlCommand.CreateParameter();
-                    _paramRoleID.DbType = DbType.Int32; //set type
-                    _paramRoleID.ParameterName = "@RoleID"; //set name
-                    _paramRoleID.Value = roleID; //set value 
-                    _sqlCommand.Parameters.Add(_paramRoleID);
-
-                    SqlParameter _paramRoleName = _sqlCommand.CreateParameter();
-                    _paramRoleName.DbType = DbType.String; //set type
-                    _paramRoleName.ParameterName = "@RoleName"; //set name
-                    _paramRoleName.Value = roleName; //set value 
-                    _sqlCommand.Parameters.Add(_paramRoleName);
-
-                    SqlParameter _paramRoleDesc = _sqlCommand.CreateParameter();
-                    _paramRoleDesc.DbType = DbType.String; //set type
-                    _paramRoleDesc.ParameterName = "@RoleDescription"; //set name
-                    _paramRoleDesc.Value = roleDescription; //set value 
-                    _sqlCommand.Parameters.Add(_paramRoleDesc);
-
-
-
-
-                    conn.Open();
-                    _sqlCommand.ExecuteNonQuery(); //call sp
-                    conn.Close();
-
-                }
-            }
-        }
-        #endregion
-    }
-}
-*/

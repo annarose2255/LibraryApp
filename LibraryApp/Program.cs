@@ -17,17 +17,20 @@ namespace LibraryApp
             RolesDatabase roles = new RolesDatabase();
             bool exit = false;
             SqlConnection con = new SqlConnection();
+
+            dboUsersCommands u = new dboUsersCommands();
+            dboRoleCommands r = new dboRoleCommands();
             do
             {
                 bool loggedin = false;
                 Printer.mainMenu();
                 string input = Console.ReadLine().Trim();
-                if (input == "g")
+                if (input == "g") //guest
                 {
                     users.currentUser = users.Users.First();
                     loggedin = true;
                 }
-                else if (input == "r")
+                else if (input == "r") //register
                 {
                     bool register = false;
                     do
@@ -57,7 +60,7 @@ namespace LibraryApp
                     
 
                 }
-                else if (input == "l")
+                else if (input == "l") //login
                 {
                     bool foundUser = false;
                     do
@@ -103,6 +106,7 @@ namespace LibraryApp
                     Console.Write("You have successfully logged in! ");
                     do
                     {
+                        //log in menu
                         Printer.loggedInMenu();
                         string loggedInInput = Console.ReadLine().Trim();
                         //print profile
@@ -121,6 +125,7 @@ namespace LibraryApp
                             }
                             else
                             {
+                                //MAKE NEW METHOD??!!
                                 users.editUser(users.currentUser.UserId, roles);
                             }
                         }
@@ -166,6 +171,7 @@ namespace LibraryApp
                                         System.Console.WriteLine("ERROR: Did not enter a role id that exists!");
                                         Console.ResetColor();
                                         okRoleID = false;
+                                        //ex.
                                     }
                                 }
                             } while (!okRoleID);
@@ -175,12 +181,15 @@ namespace LibraryApp
                         //print roles
                         else if (loggedInInput == "pr")
                         {
-                            AllPrinter.printAllRoles(roles);
+                            List<object[]> rows = r.selectAllRolesInDb();
+                            AllPrinter.printAllRolesInDb(rows);
+                            //AllPrinter.printAllRoles(roles);
                         }
                         //print users
                         else if (loggedInInput == "pu")
                         {
-                            AllPrinter.printAllUsers(users);
+                            List<object[]> rows = u.selectAllUsersInDb();
+                            AllPrinter.printAllUsersInDb(rows);
                         }
                         else if (loggedInInput == "o")
                         {
@@ -188,6 +197,7 @@ namespace LibraryApp
                         }
                         else 
                         {
+                            //MAYBE NEED FIX
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("ERROR! You have not entered one of the options.");
                             Console.ResetColor();
