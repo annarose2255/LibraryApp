@@ -195,6 +195,49 @@ namespace DatabasesClassLibrary
             }
         }
 
+        public List<object[]> selectUserByUsernameAndPasswordInDb(string username, string password)
+        {
+
+            using (SqlConnection conn = new SqlConnection(_conn))
+            {
+                using (SqlCommand _sqlCommand = new SqlCommand("SelectUserandRoleNameByID", conn))
+                {
+                    _sqlCommand.CommandType = CommandType.StoredProcedure;
+                    _sqlCommand.CommandTimeout = 30;
+
+                    SqlParameter _paramUsername = _sqlCommand.CreateParameter();
+                    _paramUsername.DbType = DbType.String; //set type
+                    _paramUsername.ParameterName = "@Username"; //set name
+                    _paramUsername.Value = username; //set value 
+                    _sqlCommand.Parameters.Add(_paramUsername);
+
+                    SqlParameter _paramPassword = _sqlCommand.CreateParameter();
+                    _paramPassword.DbType = DbType.String; //set type
+                    _paramPassword.ParameterName = "@Password"; //set name
+                    _paramPassword.Value = password; //set value 
+                    _sqlCommand.Parameters.Add(_paramPassword);
+
+                    conn.Open();
+                    DataTable dt = new DataTable();
+                    SqlDataReader reader = _sqlCommand.ExecuteReader();
+                    List<object[]> rows = new List<object[]>();
+                    while (reader.Read())//read through the db
+                    {
+                        object[] values = new object[6];
+                        reader.GetValues(values); //get the values of the row
+                        rows.Add(values); //add the row's values to the list
+
+                    }
+                    reader.Close();
+
+                    conn.Close();
+                    reader.Close();
+                    return rows;
+
+                }
+            }
+        }
+
         public List<object[]> selectAllUsersAndRoleNameInDb()
         {
 

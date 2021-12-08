@@ -20,6 +20,7 @@ namespace LibraryApp
 
             dboUsersCommands u = new dboUsersCommands();
             dboRoleCommands r = new dboRoleCommands();
+            int currentUserID = 0;
             do
             {
                 bool loggedin = false;
@@ -27,7 +28,8 @@ namespace LibraryApp
                 string input = Console.ReadLine().Trim();
                 if (input == "g") //guest
                 {
-                    users.currentUser = users.Users.First();
+                    //users.currentUser = users.Users.First();
+                    currentUserID = 0;
                     loggedin = true;
                 }
                 else if (input == "r") //register
@@ -38,6 +40,7 @@ namespace LibraryApp
                         //code to add new user
                         Console.WriteLine("Please enter your Username: ");
                         string username = Console.ReadLine().Trim();
+
                         if (users.isExistingUsername(username))
                         {
                             //Console.ForegroundColor = ConsoleColor.Red;
@@ -50,12 +53,28 @@ namespace LibraryApp
                             string password = Console.ReadLine().Trim();
                             int id = users.createNewUserId();
                             UserDTO newUser = new UserDTO(id, username, password);
+                            try //see if error from trying to enter name shows up
+                            {
+                                u.createUserIntoDb(newUser);
+                                List<object[]> select = u.selectUserByUsernameAndPasswordInDb(username, password);
+                                if (select == null)
+                                {
+                                    throw new Exception("Username and Password Dont Match");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("ERROR from database");
+                                Console.WriteLine(ex.Message);
+                            }
                             users.addUser(newUser);
                             users.currentUser = newUser;
                             Console.WriteLine("Congrats! You have registered!");
+                            //currentUserID = ;
                             loggedin = true;
                             register = true;
                         }
+                       
                     } while (!register);
                     
 
