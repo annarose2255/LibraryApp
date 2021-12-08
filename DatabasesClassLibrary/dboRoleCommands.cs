@@ -79,7 +79,7 @@ namespace DatabasesClassLibrary
                     _sqlCommand.CommandType = CommandType.StoredProcedure;
                     _sqlCommand.CommandTimeout = 30;
 
-                    
+
 
                     conn.Open();
                     DataTable dt = new DataTable();
@@ -90,7 +90,7 @@ namespace DatabasesClassLibrary
                         object[] values = new object[3];
                         reader.GetValues(values); //get the values of the row
                         rows.Add(values); //add the row's values to the list
-                        
+
                     }
                     reader.Close();
 
@@ -101,7 +101,45 @@ namespace DatabasesClassLibrary
                 }
             }
         }
+        public List<object[]> selectRoleByIDInDb(int roleID)
+        {
+
+            using (SqlConnection conn = new SqlConnection(_conn))
+            {
+                using (SqlCommand _sqlCommand = new SqlCommand("SelectRoleByID", conn))
+                {
+                    _sqlCommand.CommandType = CommandType.StoredProcedure;
+                    _sqlCommand.CommandTimeout = 30;
+
+                    SqlParameter _paramRoleID = _sqlCommand.CreateParameter();
+                    _paramRoleID.DbType = DbType.Int32; //set type
+                    _paramRoleID.ParameterName = "@RoleID"; //set name
+                    _paramRoleID.Value = roleID; //set value 
+                    _sqlCommand.Parameters.Add(_paramRoleID);
+
+
+                    conn.Open();
+                    DataTable dt = new DataTable();
+                    SqlDataReader reader = _sqlCommand.ExecuteReader();
+                    List<object[]> rows = new List<object[]>();
+                    while (reader.Read())//read through the db
+                    {
+                        object[] values = new object[3];
+                        reader.GetValues(values); //get the values of the row
+                        rows.Add(values); //add the row's values to the list
+
+                    }
+                    reader.Close();
+
+                    conn.Close();
+                    return rows;
+
+                }
+            }
+        }
         #endregion
+
+
         #region Role Delete
         public void deleteRoleByIDInDb(int roleId)
         {
@@ -131,6 +169,45 @@ namespace DatabasesClassLibrary
         }
         #endregion
 
+        #region Role Update
+        public void updateRoleInDb(int roleID, string roleName, string roleDescription)
+        {
 
+            using (SqlConnection conn = new SqlConnection(_conn))
+            {
+                using (SqlCommand _sqlCommand = new SqlCommand("UpdateRole", conn))
+                {
+                    _sqlCommand.CommandType = CommandType.StoredProcedure;
+                    _sqlCommand.CommandTimeout = 30;
+
+                    SqlParameter _paramRoleID = _sqlCommand.CreateParameter();
+                    _paramRoleID.DbType = DbType.Int32; //set type
+                    _paramRoleID.ParameterName = "@RoleID"; //set name
+                    _paramRoleID.Value = roleID; //set value 
+                    _sqlCommand.Parameters.Add(_paramRoleID);
+
+                    SqlParameter _paramRoleName = _sqlCommand.CreateParameter();
+                    _paramRoleName.DbType = DbType.String; //set type
+                    _paramRoleName.ParameterName = "@RoleName"; //set name
+                    _paramRoleName.Value = roleName; //set value 
+                    _sqlCommand.Parameters.Add(_paramRoleName);
+
+                    SqlParameter _paramRoleDesc = _sqlCommand.CreateParameter();
+                    _paramRoleDesc.DbType = DbType.String; //set type
+                    _paramRoleDesc.ParameterName = "@RoleDescription"; //set name
+                    _paramRoleDesc.Value = roleDescription; //set value 
+                    _sqlCommand.Parameters.Add(_paramRoleDesc);
+
+
+                   
+
+                    conn.Open();
+                    _sqlCommand.ExecuteNonQuery(); //call sp
+                    conn.Close();
+                    
+                }
+            }
+        }
+        #endregion
     }
 }

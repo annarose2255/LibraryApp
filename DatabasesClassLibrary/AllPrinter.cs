@@ -12,9 +12,9 @@ namespace DatabasesClassLibrary
     {
         public static void printAllRolesInDb(List<object[]> rows)
         {
-           foreach (object[] values in rows)
+            Console.WriteLine("----------------------------");
+            foreach (object[] values in rows)
             {
-                Console.WriteLine("----------------------------");
                 Console.WriteLine("Role ID: " + values[0]);
                 Console.WriteLine("Role Name: " + values[1]);
                 //Console.WriteLine(values[2].GetType().ToString());                 
@@ -29,25 +29,77 @@ namespace DatabasesClassLibrary
                 Console.WriteLine("----------------------------");
 
             }
-            
-
-            //Console.WriteLine("----------------------------");
-            //Console.WriteLine("Role ID: " + reader.GetInt32(0));
-            ////Console.WriteLine();
-            //Console.WriteLine("Role Name: "+reader.GetString(1));
-            //if (reader.GetString(2) != null)
-            //{
-            //    Console.WriteLine("Role Description: " + reader.GetString(2));
-            //}
-            //else
-            //{
-            //    Console.WriteLine("Role Description: Not Defined");
-            //}
-            //Console.WriteLine("----------------------------");
-
-            //Console.WriteLine(reader.GetString(2));
-
         }
+        public static void printAllUsersProfilesInDb(List<object[]> rows)
+        {
+            Console.WriteLine("----------------------------");
+            foreach (object[] values in rows)
+            {
+                
+                Console.WriteLine("User ID: " + values[0]);
+                Console.WriteLine("User Name: " + values[1]);
+                Console.WriteLine("Password: " + values[2]);
+                if (values[3].GetType().ToString() != "System.DBNull" && values[4].GetType().ToString() != "System.DBNull")
+                {
+                    Console.WriteLine("Name: " + values[3] + " " + values[4]);
+                }
+                else if (values[3].GetType().ToString() != "System.DBNull")
+                {
+                    Console.WriteLine("Name: " + values[3]);
+                }
+                else if (values[4].GetType().ToString() != "System.DBNull")
+                {
+                    Console.WriteLine("Name: " + values[4]);
+                }
+                else
+                {
+                    Console.WriteLine("Name: Unknown");
+                }
+                //Console.WriteLine(values[2].GetType().ToString());                 
+                if (values[5].GetType().ToString() != "System.DBNull")
+                {
+                    //NEED TO FIX LATER!!
+                    //get a sp that is a join of user and roles and selects the role names
+                    Console.WriteLine("Role ID: " + values[5]);
+                }
+                else
+                {
+                    Console.WriteLine("Role: Not set/added");
+                }
+
+                Console.WriteLine("----------------------------");
+
+            }
+        }
+        public static void printAllUsersInDb(List<object[]> rows)
+        {
+            Console.WriteLine("----------------------------");
+            foreach (object[] values in rows)
+            {
+                Console.WriteLine(String.Format("User {0} UserName: {1}", rows.IndexOf(values), values[1]));
+                Console.WriteLine("----------------------------");
+
+            }
+        }
+
+
+        //Console.WriteLine("----------------------------");
+        //Console.WriteLine("Role ID: " + reader.GetInt32(0));
+        ////Console.WriteLine();
+        //Console.WriteLine("Role Name: "+reader.GetString(1));
+        //if (reader.GetString(2) != null)
+        //{
+        //    Console.WriteLine("Role Description: " + reader.GetString(2));
+        //}
+        //else
+        //{
+        //    Console.WriteLine("Role Description: Not Defined");
+        //}
+        //Console.WriteLine("----------------------------");
+
+        //Console.WriteLine(reader.GetString(2));
+
+
 
 
         public static void printAllUsers(UsersDatabase t)
