@@ -137,6 +137,43 @@ namespace DatabasesClassLibrary
                 }
             }
         }
+
+        public List<object[]> selectRoleNameByNameInDb(string roleName)
+        {
+
+            using (SqlConnection conn = new SqlConnection(_conn))
+            {
+                using (SqlCommand _sqlCommand = new SqlCommand("SelectRoleNameByName", conn))
+                {
+                    _sqlCommand.CommandType = CommandType.StoredProcedure;
+                    _sqlCommand.CommandTimeout = 30;
+
+                    SqlParameter _paramRoleName = _sqlCommand.CreateParameter();
+                    _paramRoleName.DbType = DbType.String; //set type
+                    _paramRoleName.ParameterName = "@RoleName"; //set name
+                    _paramRoleName.Value = roleName; //set value 
+                    _sqlCommand.Parameters.Add(_paramRoleName);
+
+
+                    conn.Open();
+                    DataTable dt = new DataTable();
+                    SqlDataReader reader = _sqlCommand.ExecuteReader();
+                    List<object[]> rows = new List<object[]>();
+                    while (reader.Read())//read through the db
+                    {
+                        object[] values = new object[3];
+                        reader.GetValues(values); //get the values of the row
+                        rows.Add(values); //add the row's values to the list
+
+                    }
+                    reader.Close();
+
+                    conn.Close();
+                    return rows;
+
+                }
+            }
+        }
         #endregion
 
 
@@ -152,7 +189,7 @@ namespace DatabasesClassLibrary
                     _sqlCommand.CommandTimeout = 30;
 
                     SqlParameter _paramRoleID = _sqlCommand.CreateParameter();
-                    _paramRoleID.DbType = DbType.String; //set type
+                    _paramRoleID.DbType = DbType.Int32; //set type
                     _paramRoleID.ParameterName = "@RoleID"; //set name
                     _paramRoleID.Value = roleId; //set value 
                     _sqlCommand.Parameters.Add(_paramRoleID);

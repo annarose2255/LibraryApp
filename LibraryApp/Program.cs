@@ -12,6 +12,283 @@ namespace LibraryApp
 {
     internal class Program
     {
+        /// <summary>
+        /// Method that creates a role into the Roles database. returns the role id of the created role.
+        /// </summary>
+        /// <param name="r">The roles database to connect to</param>
+        /// <param name="error">The error database to connect to</param>
+        /// <returns>The role id of the created role. </returns>
+        public static int createRole(dboRoleCommands r, dboErrorLoggingCommands error)
+        {
+            bool goodname = false;
+            string name;
+            do //repeat input for good name
+            {
+                Console.WriteLine("Please enter the name of the role: ");
+                name = Console.ReadLine().Trim();
+                try
+                {
+                    List<object[]> rolenameSelect = r.selectRoleNameByNameInDb(name);
+                    if (rolenameSelect.Count > 0) //we got role names in the db equal to input, we can't create new role = throw exception
+                    {
+                        throw new Exception("RoleName already exists in the System");
+                    }
+                    goodname = true;
+                }
+                catch (Exception ex)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("ERROR from database");
+                    Console.WriteLine(ex.Message);
+                    Console.ResetColor();
+                    error.createLogException(ex);
+                    goodname = false;
+                }
+
+            } while (!goodname);
+
+            Console.WriteLine("Enter a description of the role if you wish: ");
+            string description = Console.ReadLine().Trim();
+
+
+            RoleDTO newRole = new RoleDTO(0, name, description);
+            try
+            {
+                r.createRoleIntoDb(newRole);
+                //int newRoleId = (int) r.selectAllRolesInDb().Last()[0];
+                //Console.WriteLine(newRole.RoleID);
+                return newRole.RoleID;
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("ERROR from database");
+                Console.WriteLine(ex.Message);
+                //Console.WriteLine(ex.StackTrace);
+                Console.ResetColor();
+                error.createLogException(ex);
+            }
+            return -1;
+        }
+        public static bool editUser(int id, dboUsersCommands u, dboErrorLoggingCommands error, dboRoleCommands r)
+        {
+
+            //List<object[]> userExist = selectUserByIDInDb(id);
+            //if (user != null)
+            //{
+            int choice = -1;
+            string edit = "yes";
+            do //for repeat asking edits
+            {
+                bool notMadeGoodChoice = false;
+                do //for error handleing
+                {
+                    notMadeGoodChoice = false;
+                    Console.WriteLine("What would you like to edit? please enter number of field. " +
+                "\n 0: First Name, 1: Last name, 2: Username, 3: Password, 4: Role");
+                    string strChoice = Console.ReadLine().Trim();
+                    try
+                    {
+                        choice = Convert.ToInt32(strChoice); //got choice now we can come out of this do while
+                        if (choice >= 5 || choice == -1)
+                        {
+                            throw new Exception("Did not enter one of the given choices");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        System.Console.WriteLine("ERROR: Did not enter one of the given choices!");
+                        error.createLogException(ex);
+                        Console.ResetColor();
+                        notMadeGoodChoice = true;
+                    }
+
+                } while (notMadeGoodChoice);
+                switch (choice)
+                {
+                    case 0:
+                        //NEED TRY CATCH??
+                        Console.WriteLine("Please enter new First Name: ");
+                        string newFirstName = Console.ReadLine().Trim();
+                        u.updateUserFirstNameInDb(id, newFirstName);
+                        //print changed profile
+                        List<object[]> Profile = u.selectUserAndRoleNameByIDInDb(id);
+                        AllPrinter.printAllUsersProfilesInDb(Profile);
+                        break;
+
+                    case 1:
+                        Console.WriteLine("Please enter new Last Name: ");
+                        string newLastName = Console.ReadLine().Trim();
+                        u.updateUserLastNameInDb(id, newLastName);
+                        //print changed profile
+                        List<object[]> Profile2 = u.selectUserAndRoleNameByIDInDb(id);
+                        AllPrinter.printAllUsersProfilesInDb(Profile2);
+                        break;
+                    case 2:
+                        bool goodUsername = false;
+                        do
+                        {
+                            //goodUsername = false;
+                            Console.WriteLine("Please enter new Username: ");
+                            string newUserName = Console.ReadLine().Trim();
+                            try
+                            {
+                                u.updateUserUsernameInDb(id, newUserName);
+                                goodUsername = true;
+                                //print changed profile
+                                List<object[]> Profile3 = u.selectUserAndRoleNameByIDInDb(id);
+                                AllPrinter.printAllUsersProfilesInDb(Profile3);
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("ERROR from database");
+                                if (ex.Message.Contains("Violation of UNIQUE KEY constraint 'UQ__Users__C9F28456E0F51A72'"))
+                                {
+                                    //ex.Message = "The entered username already exists in ";
+                                    Console.WriteLine("The username '" + newUserName + "' already exists in the system.");
+                                }
+                                else
+                                {
+                                    Console.WriteLine(ex.Message);
+                                }
+                                //  Console.WriteLine(ex.Source);
+                                Console.ResetColor();
+                                error.createLogException(ex);
+                                goodUsername = false;
+                            }
+
+
+                          
+                        } while (!goodUsername);
+                        break;
+
+                    case 3:
+                        Console.WriteLine("Please enter new Password: ");
+                        string newPassword = Console.ReadLine().Trim();
+                        u.updateUserPasswordInDb(id, newPassword);
+                        //print changed profile
+                        List<object[]> Profile4 = u.selectUserAndRoleNameByIDInDb(id);
+                        AllPrinter.printAllUsersProfilesInDb(Profile4);
+                        break;
+                    case 4: //role
+                        do
+                        { //for error handling 
+                            notMadeGoodChoice = false;
+                            Console.WriteLine("Do you wish to make your role one of the currently existing ones? Or create a new one? " +
+                                              "\n Please enter 0 to make your role one of the currently existing ones, or 1 to create a new role");
+
+                            try
+                            {
+                                string strRoleChoice = Console.ReadLine().Trim();
+                                int roleChoice = Convert.ToInt32(strRoleChoice);
+
+                                if (roleChoice < 0 || roleChoice > 1) //check that its one of the choices
+                                {
+                                    throw new Exception("Did Not enter a given choice for editing user profile's role");
+                                }
+                                switch (roleChoice)
+                                {
+                                    case 0:
+                                        bool goodId = false;
+                                        int roleID = -1;
+                                        do //loop for retrying role id
+                                        {
+                                            Console.WriteLine("Please enter the role's id or 'list' to list all the possible roles: ");
+                                            string strNewRoleID = Console.ReadLine().Trim();
+                                            if (strNewRoleID == "list")
+                                            {
+                                                List<object[]> rows = r.selectAllRolesInDb();
+                                                AllPrinter.printAllRolesInDb(rows);
+                                            }
+                                            else
+                                            {
+                                                try
+                                                {
+                                                    roleID = Convert.ToInt32(strNewRoleID);
+
+                                                    u.updateUserRoleIDInDb(id, roleID);
+                                                    goodId = true;
+                                                    List<object[]> Profile5 = u.selectUserAndRoleNameByIDInDb(id);
+                                                    AllPrinter.printAllUsersProfilesInDb(Profile5);
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    Console.ForegroundColor = ConsoleColor.Red;
+                                                    //Console.WriteLine("ERROR from database");
+
+                                                    //WRONG!!!
+                                                    if (ex.Message.Contains("statement conflicted with the FOREIGN KEY constraint "))
+                                                    {
+                                                        Console.WriteLine("The Role ID '" + roleID + "' does not exist in the system.");
+                                                    }
+                                                    else
+                                                    {
+                                                        Console.WriteLine(ex.Message);
+                                                    }
+                                                    //  Console.WriteLine(ex.Source);
+                                                    Console.ResetColor();
+                                                    error.createLogException(ex);
+                                                    goodId = false;
+                                                }
+                                            }
+                                        } while (!goodId);
+                                        break;
+                                    case 1:
+                                        try
+                                        {
+                                            int newRolesId;
+                                            do //repeat creating a new role while a new role was not created (i.e. method returned -1)
+                                            {
+                                                newRolesId = createRole(r, error);
+                                            } while (newRolesId == -1);
+
+                                            u.updateUserRoleIDInDb(id, newRolesId);
+                                            //print changed profile
+                                            List<object[]> Profile5 = u.selectUserAndRoleNameByIDInDb(id);
+                                            AllPrinter.printAllUsersProfilesInDb(Profile5);
+                                            return true;
+
+                                        }
+                                        catch (Exception ex)
+                                        { 
+                                            //???
+                                            Console.ForegroundColor = ConsoleColor.Red;
+                                            Console.WriteLine("ERROR! Please try again");
+                                            Console.WriteLine(ex.Message);
+                                            Console.ResetColor();
+                                            error.createLogException(ex);
+                                            Console.ResetColor();
+                                            return false;
+                                        }
+
+                                        break;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("ERROR: Did not enter one of the given choices!");
+                                Console.ResetColor();
+                                notMadeGoodChoice = true; //repeat the loop
+                            }
+                        } while (notMadeGoodChoice);
+                        break; //???
+                }
+                Console.WriteLine("Would you like to edit another field? if so, type 'yes'");
+                edit = Console.ReadLine().Trim().ToLower();
+            } while (edit == "yes");
+            return true;
+
+            //}
+            //else
+            //{
+            //    return false;
+            //}
+        }
         static void Main(string[] args)
         {
             UsersDatabase users = new UsersDatabase();
@@ -149,7 +426,8 @@ namespace LibraryApp
                         //edit profile
                         else if (loggedInInput == "e")
                         {
-                            if (users.currentUser.UserId == 0)
+                            //FIX LATER FOR ROLE PREMISSIONS
+                            if (currentUserID == 0)
                             {
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("Error! You cannot edit the profile of a Guest");
@@ -158,15 +436,22 @@ namespace LibraryApp
                             else
                             {
                                 //MAKE NEW METHOD??!!
-                                users.editUser(users.currentUser.UserId, roles);
+                                editUser(currentUserID, u, errorLogging, r);
+                                //users.editUser(users.currentUser.UserId, roles);
                             }
                         }
                         //create new role
                         else if (loggedInInput == "cr")
                         {
-                            roles.createNewRole(roles.createNewRoleId());
-                            AllPrinter.printAllRoles(roles);
-                           
+                            int newRoleId;
+                            do
+                            {
+                                newRoleId = createRole(r, errorLogging);
+                            }while (newRoleId == -1);
+
+                            List<object[]> rows = r.selectAllRolesInDb();
+                            AllPrinter.printAllRolesInDb(rows);
+
                         }
                         //Edit role
                         else if (loggedInInput == "er")

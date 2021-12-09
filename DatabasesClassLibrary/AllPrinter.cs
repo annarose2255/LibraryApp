@@ -20,7 +20,14 @@ namespace DatabasesClassLibrary
                 //Console.WriteLine(values[2].GetType().ToString());                 
                 if (values[2].GetType().ToString() != "System.DBNull")
                 {
-                    Console.WriteLine("Role Description: " + values[2]);
+                    if ( values[2].ToString() != "")
+                    {
+                        Console.WriteLine("Role Description: " + values[2]);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Role Description: Not Defined");
+                    }
                 }
                 else
                 {

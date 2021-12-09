@@ -132,7 +132,7 @@ namespace DatabasesClassLibrary
                     _sqlCommand.CommandTimeout = 30;
 
                     SqlParameter _paramUserID = _sqlCommand.CreateParameter();
-                    _paramUserID.DbType = DbType.String; //set type
+                    _paramUserID.DbType = DbType.Int32; //set type
                     _paramUserID.ParameterName = "@UserID"; //set name
                     _paramUserID.Value = id; //set value 
                     _sqlCommand.Parameters.Add(_paramUserID);
@@ -205,7 +205,7 @@ namespace DatabasesClassLibrary
                     _sqlCommand.CommandTimeout = 30;
 
                     SqlParameter _paramUserID = _sqlCommand.CreateParameter();
-                    _paramUserID.DbType = DbType.String; //set type
+                    _paramUserID.DbType = DbType.Int32; //set type
                     _paramUserID.ParameterName = "@UserID"; //set name
                     _paramUserID.Value = id; //set value 
                     _sqlCommand.Parameters.Add(_paramUserID);
@@ -422,7 +422,7 @@ namespace DatabasesClassLibrary
                     _sqlCommand.CommandTimeout = 30;
 
                     SqlParameter _paramUserId = _sqlCommand.CreateParameter();
-                    _paramUserId.DbType = DbType.String; //set type
+                    _paramUserId.DbType = DbType.Int32; //set type
                     _paramUserId.ParameterName = "@UserID"; //set name
                     _paramUserId.Value = userid; //set value 
                     _sqlCommand.Parameters.Add(_paramUserId);
@@ -451,7 +451,7 @@ namespace DatabasesClassLibrary
                     _sqlCommand.CommandTimeout = 30;
 
                     SqlParameter _paramUserId = _sqlCommand.CreateParameter();
-                    _paramUserId.DbType = DbType.String; //set type
+                    _paramUserId.DbType = DbType.Int32; //set type
                     _paramUserId.ParameterName = "@UserID"; //set name
                     _paramUserId.Value = userid; //set value 
                     _sqlCommand.Parameters.Add(_paramUserId);
@@ -481,7 +481,7 @@ namespace DatabasesClassLibrary
                     _sqlCommand.CommandTimeout = 30;
 
                     SqlParameter _paramUserId = _sqlCommand.CreateParameter();
-                    _paramUserId.DbType = DbType.String; //set type
+                    _paramUserId.DbType = DbType.Int32; //set type
                     _paramUserId.ParameterName = "@UserID"; //set name
                     _paramUserId.Value = userid; //set value 
                     _sqlCommand.Parameters.Add(_paramUserId);
@@ -514,7 +514,7 @@ namespace DatabasesClassLibrary
                     _sqlCommand.CommandTimeout = 30;
 
                     SqlParameter _paramUserId = _sqlCommand.CreateParameter();
-                    _paramUserId.DbType = DbType.String; //set type
+                    _paramUserId.DbType = DbType.Int32; //set type
                     _paramUserId.ParameterName = "@UserID"; //set name
                     _paramUserId.Value = userid; //set value 
                     _sqlCommand.Parameters.Add(_paramUserId);
@@ -546,7 +546,7 @@ namespace DatabasesClassLibrary
                     _sqlCommand.CommandTimeout = 30;
 
                     SqlParameter _paramUserId = _sqlCommand.CreateParameter();
-                    _paramUserId.DbType = DbType.String; //set type
+                    _paramUserId.DbType = DbType.Int32; //set type
                     _paramUserId.ParameterName = "@UserID"; //set name
                     _paramUserId.Value = userid; //set value 
                     _sqlCommand.Parameters.Add(_paramUserId);
@@ -582,7 +582,7 @@ namespace DatabasesClassLibrary
 
 
                     SqlParameter _paramUserId = _sqlCommand.CreateParameter();
-                    _paramUserId.DbType = DbType.String; //set type
+                    _paramUserId.DbType = DbType.Int32; //set type
                     _paramUserId.ParameterName = "@UserID"; //set name
                     _paramUserId.Value = userid; //set value 
                     _sqlCommand.Parameters.Add(_paramUserId);
@@ -594,6 +594,10 @@ namespace DatabasesClassLibrary
                 }
             }
         }
+        #endregion
+
+        #region User Edit Command Asking
+        
         #endregion
     }
 }
