@@ -59,7 +59,16 @@ namespace LibraryApp
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("ERROR from database");
-                            Console.WriteLine(ex.Message);
+                            if (ex.Message.Contains("Violation of UNIQUE KEY constraint 'UQ__Users__C9F28456E0F51A72'"))
+                            {
+                                //ex.Message = "The entered username already exists in ";
+                                Console.WriteLine("The username '"+username+"' already exists in the system.");
+                            }
+                            else
+                            {
+                                Console.WriteLine(ex.Message);
+                            }
+                          //  Console.WriteLine(ex.Source);
                             Console.ResetColor();
                             errorLogging.createLogException(ex);
                         }
@@ -81,8 +90,13 @@ namespace LibraryApp
 
                         try
                         {
+                            List<object[]> usernameSelect = u.selectUserNameByUsernameInDb(username);
+                            if (usernameSelect.Count == 0) //that username isn't there
+                            {
+                                throw new Exception("Username does not exist in the System");
+                            }
                             List<object[]> select = u.selectUserByUsernameAndPasswordInDb(username, password);
-                            if (select == null)
+                            if (select.Count == 0) //password not match username entry
                             {
                                 throw new Exception("Username and Password Dont Match");
                             }
@@ -97,6 +111,7 @@ namespace LibraryApp
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("ERROR from database");
                             Console.WriteLine(ex.Message);
+                            //Console.WriteLine(ex.StackTrace);
                             Console.ResetColor();
                             errorLogging.createLogException(ex);
                         }
@@ -128,7 +143,8 @@ namespace LibraryApp
                         //print profile
                         if (loggedInInput == "pp")
                         {
-                            AllPrinter.printProfile(users.currentUser, roles);
+                            List<object[]> Profile = u.selectUserAndRoleNameByIDInDb(currentUserID);
+                            AllPrinter.printAllUsersProfilesInDb(Profile);
                         }
                         //edit profile
                         else if (loggedInInput == "e")

@@ -36,7 +36,7 @@ namespace DatabasesClassLibrary
             foreach (object[] values in rows)
             {
 
-                Console.WriteLine("User ID: " + values[0]);
+                //Console.WriteLine("User ID: " + values[0]);
                 Console.WriteLine("User Name: " + values[1]);
                 Console.WriteLine("Password: " + values[2]);
                 if (values[3].GetType().ToString() != "System.DBNull" && values[4].GetType().ToString() != "System.DBNull")
@@ -78,10 +78,11 @@ namespace DatabasesClassLibrary
             foreach (object[] values in rows)
             {
                 Console.WriteLine("Error ID: " + values[0]);
-                Console.WriteLine("Stack Trace: " + values[1]);
+                Console.WriteLine("Stack Trace: " + values[1].ToString().Trim());
                 Console.WriteLine("Message: " + values[2]);
                 Console.WriteLine("Source: " + values[3]);
-                Console.WriteLine("LogDate: " + values[5].ToString());
+                //Console.WriteLine("URL: " + values[4]);
+                Console.WriteLine("LogDate: " + values[4].ToString());
                 
                 Console.WriteLine("----------------------------");
 

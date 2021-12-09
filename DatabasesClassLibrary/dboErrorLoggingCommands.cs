@@ -56,11 +56,11 @@ namespace DatabasesClassLibrary
                     _sqlCommand.Parameters.Add(_paramSource);
 
                     //???
-                    SqlParameter _paramLastName = _sqlCommand.CreateParameter();
-                    _paramLastName.DbType = DbType.String; //set type
-                    _paramLastName.ParameterName = "@parmURL"; //set name
-                    //_paramLastName.Value = u.LastName; //set value 
-                    _sqlCommand.Parameters.Add(_paramLastName);
+                    //SqlParameter _paramURL = _sqlCommand.CreateParameter();
+                    //_paramURL.DbType = DbType.String; //set type
+                    //_paramURL.ParameterName = "@parmURL"; //set name
+                    //_paramURL.Value = e.HelpLink; //set value 
+                    //_sqlCommand.Parameters.Add(_paramURL);
 
                     SqlParameter _paramLogDate = _sqlCommand.CreateParameter();
                     _paramLogDate.DbType = DbType.DateTime; //set type
