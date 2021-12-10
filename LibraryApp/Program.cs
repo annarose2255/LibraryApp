@@ -483,6 +483,10 @@ namespace LibraryApp
             dboRoleCommands r = new dboRoleCommands();
             dboErrorLoggingCommands errorLogging = new dboErrorLoggingCommands();
             int currentUserID = 0;
+
+            //TODO: Create at least one or more table/s of your choice and implement UI, CRUD, and database work. It must include a primary key, foreign key/s. 
+           //IDEA: *premissions (id (pk), name, description, roleID (fk) [1 role can have more than 1 premission]), employee, *CheckedOutAndReturn (id (pk), date, item (just a string name for now), userid (fk) Type [Takeout or return])
+
             do
             {
                 bool loggedin = false;
@@ -672,7 +676,7 @@ namespace LibraryApp
                         }
                         else
                         {
-
+                          
                             //MAYBE NEED FIX
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("ERROR! You have not entered one of the options.");
