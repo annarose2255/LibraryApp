@@ -51,6 +51,11 @@ namespace CommonClassLibrary
             Console.Write("\tl");
             Console.ResetColor();
             Console.WriteLine(" to login as an existing user");
+            //list users
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.Write("\tpu");
+            Console.ResetColor();
+            Console.WriteLine(" to list all users");
 
             //Exit
             Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -77,7 +82,7 @@ namespace CommonClassLibrary
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.Write("\te");
             Console.ResetColor();
-            Console.WriteLine(" to edit your user settings");
+            Console.WriteLine(" to edit your user settings or delete your account");
 
             //create new role
             Console.ForegroundColor = ConsoleColor.DarkGreen;
@@ -89,7 +94,7 @@ namespace CommonClassLibrary
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.Write("\ter");
             Console.ResetColor();
-            Console.WriteLine(" to edit a role");
+            Console.WriteLine(" to edit or delete a role");
 
             //print roles
             Console.ForegroundColor = ConsoleColor.DarkBlue;

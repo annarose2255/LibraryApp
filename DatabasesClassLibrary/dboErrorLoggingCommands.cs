@@ -73,6 +73,7 @@ namespace DatabasesClassLibrary
                     _paramErrorIDReturn.DbType = DbType.Int32; //set type
                     _paramErrorIDReturn.ParameterName = "@parmOutExceptionLoggingID"; //set name
                     //_paramErrorID.Value = u.RoleID; //set value 
+                    //_sqlCommand.Parameters.Add()
                     var pk = _sqlCommand.Parameters.Add(_paramErrorIDReturn);
                     _paramErrorIDReturn.Direction = ParameterDirection.Output; //make it output 
 

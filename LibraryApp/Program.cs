@@ -72,7 +72,15 @@ namespace LibraryApp
             }
             return -1;
         }
-        public static bool editUser(int id, dboUsersCommands u, dboErrorLoggingCommands error, dboRoleCommands r)
+        /// <summary>
+        /// Method to edit the user by the given user id.
+        /// </summary>
+        /// <param name="id">Id of the user to edit</param>
+        /// <param name="u"> Class to call the SPs for accessing the users DB</param>
+        /// <param name="error">Class to call the SPs for accessing the error DB</param>
+        /// <param name="r">Class to call the SPs for accessing the roles DB</param>
+        /// <returns>The id of the user edited. Returns -1 if the user was deleted.</returns>
+        public static int editUser(int id, dboUsersCommands u, dboErrorLoggingCommands error, dboRoleCommands r)
         {
 
             //List<object[]> userExist = selectUserByIDInDb(id);
@@ -82,17 +90,18 @@ namespace LibraryApp
             string edit = "yes";
             do //for repeat asking edits
             {
+                
                 bool notMadeGoodChoice = false;
                 do //for error handleing
                 {
                     notMadeGoodChoice = false;
                     Console.WriteLine("What would you like to edit? please enter number of field. " +
-                "\n 0: First Name, 1: Last name, 2: Username, 3: Password, 4: Role");
+                "\n 0: First Name, 1: Last name, 2: Username, 3: Password, 4: Role, 5: Delete Profile");
                     string strChoice = Console.ReadLine().Trim();
                     try
                     {
                         choice = Convert.ToInt32(strChoice); //got choice now we can come out of this do while
-                        if (choice >= 5 || choice == -1)
+                        if (choice >= 6 || choice <= -1)
                         {
                             throw new Exception("Did not enter one of the given choices");
                         }
@@ -250,7 +259,7 @@ namespace LibraryApp
                                             //print changed profile
                                             List<object[]> Profile5 = u.selectUserAndRoleNameByIDInDb(id);
                                             AllPrinter.printAllUsersProfilesInDb(Profile5);
-                                            return true;
+                                            return id;
 
                                         }
                                         catch (Exception ex)
@@ -262,7 +271,7 @@ namespace LibraryApp
                                             Console.ResetColor();
                                             error.createLogException(ex);
                                             Console.ResetColor();
-                                            return false;
+                                            return id; //??
                                         }
 
                                         break;
@@ -276,12 +285,191 @@ namespace LibraryApp
                                 notMadeGoodChoice = true; //repeat the loop
                             }
                         } while (notMadeGoodChoice);
-                        break; //???
+                        break;
+                    case 5: //delete user
+                        try
+                        {
+                            u.deleteUserByIDInDb(id);
+                            Console.WriteLine("You have succesfully deleted your profile.");
+                            //change id to change current id and exit login 
+                            return -1; //end editing cuz profile and user are gone.
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("ERROR!");
+                            Console.WriteLine(ex.Message);
+                            Console.ResetColor();
+                            error.createLogException(ex);
+                            Console.ResetColor();
+                        }
+                        
+                        break;
                 }
                 Console.WriteLine("Would you like to edit another field? if so, type 'yes'");
                 edit = Console.ReadLine().Trim().ToLower();
             } while (edit == "yes");
-            return true;
+            return id;
+        }
+
+        public static void editRole(int roleId, dboErrorLoggingCommands error, dboRoleCommands r, dboUsersCommands u)
+        {
+
+            string edit = "edit";
+            do //for repeat asking edits
+            {
+                bool okRoleID = false;
+                string roleEditing = "";
+                int roleDeleteId = -1;
+                //int roleID = -1;
+                do //for error handleing of finding role
+                {
+                    okRoleID = false;
+                    Console.WriteLine("Please enter the id of the role you wish to edit. Type 'list' if you wish to see all the roles. Type 'delete' if you wish to delete a role.");
+                    roleEditing = Console.ReadLine().Trim().ToLower();
+                    if (roleEditing == "list")
+                    {
+                        List<object[]> rows = r.selectAllRolesInDb();
+                        AllPrinter.printAllRolesInDb(rows);
+                        //Console.WriteLine();
+
+                    }
+                    else if (roleEditing == "delete")
+                    {
+                        Console.WriteLine("Please enter the id of the role you wish to delete.");
+                        string roleDelete = Console.ReadLine().Trim().ToLower();
+                        try
+                        {
+                            roleDeleteId = Convert.ToInt32(roleDelete);
+
+                            //check for role existing
+                            List<object[]> roleFound = r.selectRoleByIDInDb(roleDeleteId);
+                            if (roleFound.Count > 0)
+                            {
+                                okRoleID = true;
+                            }
+                            else
+                            {
+                                throw new Exception("Role was not found");
+                            }
+
+
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            //Console.WriteLine("ERROR from database");
+                            Console.WriteLine(ex.Message);
+                            //  Console.WriteLine(ex.Source);
+                            Console.ResetColor();
+                            error.createLogException(ex);
+                            okRoleID = false;
+
+                        }
+                        //Console.WriteLine();
+
+                    }
+                    else
+                    {
+                        try //see if role id is good 
+                        {
+                            roleId = Convert.ToInt32(roleEditing);
+
+                            List<object[]> roleFound = r.selectRoleByIDInDb(roleId);
+                            if (roleFound.Count > 0)
+                            {
+                                okRoleID = true;
+                            }
+                            else
+                            {
+                                throw new Exception("Role was not found");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            //Console.WriteLine("ERROR from database");
+                            Console.WriteLine(ex.Message);
+                            //  Console.WriteLine(ex.Source);
+                            Console.ResetColor();
+                            error.createLogException(ex);
+                            okRoleID = false;
+                        }
+
+                    }
+                } while (!okRoleID);
+
+                bool roleEdited = false;
+
+                if (roleEditing == "delete")
+                {
+                    try
+                    {
+                        List<object[]> usersWithRoleID = u.selectUserAndRoleIDByRoleIDInDb(roleDeleteId);
+                        foreach (object[] user in usersWithRoleID)
+                        {
+                            u.updateUserRoleIDInDb((int)user[0], -1); //might need to change the -1 or the update method
+                        }
+                        r.deleteRoleByIDInDb(roleDeleteId);
+                        List<object[]> rows = r.selectAllRolesInDb();
+                        AllPrinter.printAllRolesInDb(rows);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        //Console.WriteLine("ERROR from database");
+                        Console.WriteLine(ex.Message);
+                        //  Console.WriteLine(ex.Source);
+                        Console.ResetColor();
+                        error.createLogException(ex);
+                    }
+                }
+                else
+                {
+                    do //update role
+                    {
+                        string newName = "";
+                        try
+                        {
+                            Console.WriteLine("Please enter the new name of the role: ");
+                            newName = Console.ReadLine().Trim();
+                            Console.WriteLine("Please enter the new role description: ");
+                            string newDesc = Console.ReadLine().Trim();
+                            r.updateRoleInDb(roleId, newName, newDesc);
+
+                            List<object[]> rows = r.selectRoleByIDInDb(roleId);
+                            AllPrinter.printAllRolesInDb(rows);
+                            roleEdited = true;
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("ERROR!");
+                            if (ex.Message.Contains("Violation of UNIQUE KEY constraint"))
+                            {
+                                //ex.Message = "The entered username already exists in ";
+                                Console.WriteLine("The role name '" + newName + "' already exists in the system.");
+                            }
+                            else
+                            {
+                                Console.WriteLine(ex.Message);
+                            }
+                            Console.WriteLine(ex.Message);
+                            Console.ResetColor();
+                            error.createLogException(ex);
+                            Console.ResetColor();
+                            roleEdited = false;
+                        }
+
+                    } while (!roleEdited);
+                }
+
+
+                Console.WriteLine("If you wish to keep editing or deleting, please type 'edit'.");
+                edit = Console.ReadLine().Trim().ToLower();
+
+            } while (edit == "edit");
+
         }
 
         static void Main(string[] args)
@@ -334,19 +522,19 @@ namespace LibraryApp
                             if (ex.Message.Contains("Violation of UNIQUE KEY constraint 'UQ__Users__C9F28456E0F51A72'"))
                             {
                                 //ex.Message = "The entered username already exists in ";
-                                Console.WriteLine("The username '"+username+"' already exists in the system.");
+                                Console.WriteLine("The username '" + username + "' already exists in the system.");
                             }
                             else
                             {
                                 Console.WriteLine(ex.Message);
                             }
-                          //  Console.WriteLine(ex.Source);
+                            //  Console.WriteLine(ex.Source);
                             Console.ResetColor();
                             errorLogging.createLogException(ex);
                         }
-                       
+
                     } while (!register);
-                    
+
 
                 }
                 else if (input == "l") //login
@@ -372,7 +560,7 @@ namespace LibraryApp
                             {
                                 throw new Exception("Username and Password Dont Match");
                             }
-                            currentUserID = (int) select.ElementAt(0)[0]; //should return user id for this current user
+                            currentUserID = (int)select.ElementAt(0)[0]; //should return user id for this current user
                             Console.WriteLine(currentUserID);
                             loggedin = true;
                             foundUser = true;
@@ -389,12 +577,17 @@ namespace LibraryApp
                         }
 
                     } while (!foundUser);
-                    
-                    
+
+
                 }
                 else if (input == "e")
                 {
                     exit = true;
+                }
+                else if (input == "pu")
+                {
+                    List<object[]> rows = u.selectAllUsersInDb();
+                    AllPrinter.printAllUsersInDb(rows);
                 }
                 else
                 {
@@ -430,9 +623,14 @@ namespace LibraryApp
                             }
                             else
                             {
-                                //MAKE NEW METHOD??!!
-                                editUser(currentUserID, u, errorLogging, r);
+                                currentUserID = editUser(currentUserID, u, errorLogging, r);
                                 //users.editUser(users.currentUser.UserId, roles);
+                            }
+
+                            if (currentUserID == -1)
+                            {
+                                Console.WriteLine("You have logged out!");
+                                loggedin = false;
                             }
                         }
                         //create new role
@@ -451,47 +649,8 @@ namespace LibraryApp
                         //Edit role
                         else if (loggedInInput == "er")
                         {
-                            //TODO: update edit roles
-                            bool okRoleID = false;
-                            int inputedRoleId = -1;
-                            do //for error handleing
-                            {
-                                okRoleID = false;
-                                Console.WriteLine("Please enter the id of the role you wish to edit. Type 'list' if you wish to see all the roles.");
-                                string roleEditing = Console.ReadLine().Trim().ToLower();
-                                if (roleEditing == "list")
-                                {
-                                    AllPrinter.printAllRoles(roles);
-                                    //Console.WriteLine();
-                                    
-                                }
-                                else
-                                {
-                                    try
-                                    {
-                                        inputedRoleId = Convert.ToInt32(roleEditing); //got choice now we can come out of this do while
-                                        RoleDTO foundRole = roles.findRole(inputedRoleId);
-                                        if (inputedRoleId <= -1 || foundRole == null)
-                                        {
-                                            throw new Exception();
-                                        }
-                                        else
-                                        {
-                                            okRoleID = true;
-                                        }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        System.Console.WriteLine("ERROR: Did not enter a role id that exists!");
-                                        Console.ResetColor();
-                                        okRoleID = false;
-                                        //ex.
-                                    }
-                                }
-                            } while (!okRoleID);
-                            roles.editRole(inputedRoleId);
-
+                            editRole(-1, errorLogging, r, u);
+                            
                         }
                         //print roles
                         else if (loggedInInput == "pr")
@@ -508,10 +667,12 @@ namespace LibraryApp
                         }
                         else if (loggedInInput == "o")
                         {
+                            Console.WriteLine("You have successfully Logged Out!");
                             loggedin = false;
                         }
                         else
                         {
+
                             //MAYBE NEED FIX
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("ERROR! You have not entered one of the options.");
@@ -520,7 +681,7 @@ namespace LibraryApp
                         }
 
                     } while (loggedin);
-                    //TODO: Add deleting of roles and users 
+                    
                 }
             } while (!exit);
             Console.WriteLine("You have successfully exited! Thanks and come back soon!");
