@@ -162,7 +162,7 @@ namespace LibraryApp
                             }
 
 
-                          
+
                         } while (!goodUsername);
                         break;
 
@@ -254,7 +254,7 @@ namespace LibraryApp
 
                                         }
                                         catch (Exception ex)
-                                        { 
+                                        {
                                             //???
                                             Console.ForegroundColor = ConsoleColor.Red;
                                             Console.WriteLine("ERROR! Please try again");
@@ -282,13 +282,8 @@ namespace LibraryApp
                 edit = Console.ReadLine().Trim().ToLower();
             } while (edit == "yes");
             return true;
-
-            //}
-            //else
-            //{
-            //    return false;
-            //}
         }
+
         static void Main(string[] args)
         {
             UsersDatabase users = new UsersDatabase();
@@ -426,7 +421,7 @@ namespace LibraryApp
                         //edit profile
                         else if (loggedInInput == "e")
                         {
-                            //FIX LATER FOR ROLE PREMISSIONS
+                            //TODO: add more role premissions for editing 
                             if (currentUserID == 0)
                             {
                                 Console.ForegroundColor = ConsoleColor.Red;
@@ -447,7 +442,7 @@ namespace LibraryApp
                             do
                             {
                                 newRoleId = createRole(r, errorLogging);
-                            }while (newRoleId == -1);
+                            } while (newRoleId == -1);
 
                             List<object[]> rows = r.selectAllRolesInDb();
                             AllPrinter.printAllRolesInDb(rows);
@@ -456,6 +451,7 @@ namespace LibraryApp
                         //Edit role
                         else if (loggedInInput == "er")
                         {
+                            //TODO: update edit roles
                             bool okRoleID = false;
                             int inputedRoleId = -1;
                             do //for error handleing
@@ -466,6 +462,8 @@ namespace LibraryApp
                                 if (roleEditing == "list")
                                 {
                                     AllPrinter.printAllRoles(roles);
+                                    //Console.WriteLine();
+                                    
                                 }
                                 else
                                 {
@@ -479,7 +477,7 @@ namespace LibraryApp
                                         }
                                         else
                                         {
-                                            okRoleID=true;
+                                            okRoleID = true;
                                         }
                                     }
                                     catch (Exception ex)
@@ -512,18 +510,19 @@ namespace LibraryApp
                         {
                             loggedin = false;
                         }
-                        else 
+                        else
                         {
                             //MAYBE NEED FIX
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("ERROR! You have not entered one of the options.");
                             Console.ResetColor();
-                            
+
                         }
 
                     } while (loggedin);
+                    //TODO: Add deleting of roles and users 
                 }
-            }while (!exit);
+            } while (!exit);
             Console.WriteLine("You have successfully exited! Thanks and come back soon!");
            
             Console.ReadKey();
