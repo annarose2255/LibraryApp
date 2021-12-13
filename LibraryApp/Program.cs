@@ -484,7 +484,8 @@ namespace LibraryApp
             dboErrorLoggingCommands errorLogging = new dboErrorLoggingCommands();
             int currentUserID = 0;
             int permissionID = 2; //default to member
-
+           
+            //PLEASE NOTE THAT THE PREMISSIONS OF THE USERS ARE DEFINED IN THE PERMISSION TABLE, AND THUS PREMISSIONS ARE CODED VIA PERMISSION ID   
             
             do
             {
@@ -494,7 +495,6 @@ namespace LibraryApp
                 string input = Console.ReadLine().Trim();
                 if (input == "g") //guest
                 {
-                    //users.currentUser = users.Users.First();
                     currentUserID = 0;
                     permissionID = 1; //guest permission
                     loggedin = true;
