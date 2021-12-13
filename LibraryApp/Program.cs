@@ -483,12 +483,12 @@ namespace LibraryApp
             dboRoleCommands r = new dboRoleCommands();
             dboErrorLoggingCommands errorLogging = new dboErrorLoggingCommands();
             int currentUserID = 0;
+            int permissionID = 2; //default to member
 
-            //TODO: Create at least one or more table/s of your choice and implement UI, CRUD, and database work. It must include a primary key, foreign key/s. 
-           //IDEA: *premissions (id (pk), name, description, roleID (fk) [1 role can have more than 1 premission]), employee, *CheckedOutAndReturn (id (pk), date, item (just a string name for now), userid (fk) Type [Takeout or return])
-
+            
             do
             {
+                permissionID = 2; //default to member
                 bool loggedin = false;
                 Printer.mainMenu();
                 string input = Console.ReadLine().Trim();
@@ -496,6 +496,7 @@ namespace LibraryApp
                 {
                     //users.currentUser = users.Users.First();
                     currentUserID = 0;
+                    permissionID = 1; //guest permission
                     loggedin = true;
                 }
                 else if (input == "r") //register
@@ -514,7 +515,7 @@ namespace LibraryApp
                         {
                             u.createUserIntoDb(newUser);
                             currentUserID = newUser.UserId;
-                            Console.WriteLine(currentUserID);
+                            //Console.WriteLine(currentUserID);
                             Console.WriteLine("Congrats! You have registered!"); //if we got here then we have no errors
                             loggedin = true;
                             register = true;
@@ -565,7 +566,7 @@ namespace LibraryApp
                                 throw new Exception("Username and Password Dont Match");
                             }
                             currentUserID = (int)select.ElementAt(0)[0]; //should return user id for this current user
-                            Console.WriteLine(currentUserID);
+                            //Console.WriteLine(currentUserID);
                             loggedin = true;
                             foundUser = true;
                         }
@@ -607,6 +608,16 @@ namespace LibraryApp
                     do
                     {
                         //log in menu
+                        List<object[]> user = u.selectUserAndPermissionIDByUserIDInDb(currentUserID);
+                        if (user.ElementAt(0)[6].GetType().ToString() != "System.DBNull") //if not null
+                        {
+                            if (user.ElementAt(0)[6].ToString() != "") //if not empty
+                            {
+                                permissionID = (int)user.ElementAt(0)[6];
+                                //Console.WriteLine("permission id: " + permissionID);
+                            }
+                        }
+
                         Printer.loggedInMenu();
                         string loggedInInput = Console.ReadLine().Trim();
                         //print profile
@@ -618,8 +629,8 @@ namespace LibraryApp
                         //edit profile
                         else if (loggedInInput == "e")
                         {
-                            //TODO: add more role premissions for editing 
-                            if (currentUserID == 0)
+                  
+                            if (permissionID == 1)
                             {
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("Error! You cannot edit the profile of a Guest");
@@ -640,20 +651,37 @@ namespace LibraryApp
                         //create new role
                         else if (loggedInInput == "cr")
                         {
-                            int newRoleId;
-                            do
+                            if (permissionID == 1)
                             {
-                                newRoleId = createRole(r, errorLogging);
-                            } while (newRoleId == -1);
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Error! You cannot create or edit roles while a Guest");
+                                Console.ResetColor();
+                            }
+                            else
+                            {
+                                int newRoleId;
+                                do
+                                {
+                                    newRoleId = createRole(r, errorLogging);
+                                } while (newRoleId == -1);
 
-                            List<object[]> rows = r.selectAllRolesInDb();
-                            AllPrinter.printAllRolesInDb(rows);
-
+                                List<object[]> rows = r.selectAllRolesInDb();
+                                AllPrinter.printAllRolesInDb(rows);
+                            }
                         }
                         //Edit role
                         else if (loggedInInput == "er")
                         {
-                            editRole(-1, errorLogging, r, u);
+                            if (permissionID == 1)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Error! You cannot create or edit roles while a Guest");
+                                Console.ResetColor();
+                            }
+                            else
+                            {
+                                editRole(-1, errorLogging, r, u);
+                            }
                             
                         }
                         //print roles
@@ -668,6 +696,20 @@ namespace LibraryApp
                         {
                             List<object[]> rows = u.selectAllUsersInDb();
                             AllPrinter.printAllUsersInDb(rows);
+                        }
+                        else if (loggedInInput == "pup")
+                        {
+                            if (permissionID == 0) //admin permission
+                            {
+                                List<object[]> rows = u.selectAllUsersInDb();
+                                AllPrinter.printAllUsersProfilesInDb(rows);
+                            }
+                            else
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Error! Only Admins can see all user profiles");
+                                Console.ResetColor();
+                            }
                         }
                         else if (loggedInInput == "o")
                         {

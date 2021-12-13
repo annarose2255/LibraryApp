@@ -343,6 +343,43 @@ namespace DatabasesClassLibrary
             }
         }
 
+        public List<object[]> selectUserAndPermissionIDByUserIDInDb(int id)
+        {
+
+            using (SqlConnection conn = new SqlConnection(_conn))
+            {
+                using (SqlCommand _sqlCommand = new SqlCommand("SelectUserAndPermissionIDByUserID", conn))
+                {
+                    _sqlCommand.CommandType = CommandType.StoredProcedure;
+                    _sqlCommand.CommandTimeout = 30;
+
+                    SqlParameter _paramUserID = _sqlCommand.CreateParameter();
+                    _paramUserID.DbType = DbType.Int32; //set type
+                    _paramUserID.ParameterName = "@UserID"; //set name
+                    _paramUserID.Value = id; //set value 
+                    _sqlCommand.Parameters.Add(_paramUserID);
+
+                    conn.Open();
+                    DataTable dt = new DataTable();
+                    SqlDataReader reader = _sqlCommand.ExecuteReader();
+                    List<object[]> rows = new List<object[]>();
+                    while (reader.Read())//read through the db
+                    {
+                        object[] values = new object[9];
+                        reader.GetValues(values); //get the values of the row
+                        rows.Add(values); //add the row's values to the list
+
+                    }
+                    reader.Close();
+
+                    conn.Close();
+                    reader.Close();
+                    return rows;
+
+                }
+            }
+        }
+
         //DONT KNOW ABOUT THIS!!
         public List<object[]> selectAllUsersNamesInDb()
         {
@@ -376,6 +413,8 @@ namespace DatabasesClassLibrary
                 }
             }
         }
+
+
         #endregion
 
 

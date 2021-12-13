@@ -299,5 +299,19 @@ namespace UnitTestLibraryApp
             //int num = c.createUserIntoDb(user);
             Assert.IsNotNull(d);
         }
+
+
+        [TestMethod]
+        public void TestPrintPermission()
+        {
+            //dboUsersCommands c = new dboUsersCommands(@"Data Source=ANNA-DESKTOP;Initial Catalog=LibraryAppTest;Integrated Security=True");
+            //dboRoleCommands c = new dboRoleCommands();
+            dboPermissionsCommands p = new dboPermissionsCommands(@"Data Source=ANNA-DESKTOP;Initial Catalog=LibraryApp;Integrated Security=True");
+
+            List<object[]> d = p.selectAllPermissionsInDb();
+            AllPrinter.printAllPermissionsInDb(d);
+            //int num = c.createUserIntoDb(user);
+            Assert.IsNotNull(d);
+        }
     }
 }

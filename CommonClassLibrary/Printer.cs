@@ -107,6 +107,12 @@ namespace CommonClassLibrary
             Console.ResetColor();
             Console.WriteLine(" to print all existing Users");
 
+            //print users profiles
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.Write("\tpup");
+            Console.ResetColor();
+            Console.WriteLine(" to print all User Profiles");
+
             //logout
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.Write("\to");

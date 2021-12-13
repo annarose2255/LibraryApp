@@ -20,7 +20,7 @@ namespace DatabasesClassLibrary
                 //Console.WriteLine(values[2].GetType().ToString());                 
                 if (values[2].GetType().ToString() != "System.DBNull")
                 {
-                    if ( values[2].ToString() != "")
+                    if (values[2].ToString() != "")
                     {
                         Console.WriteLine("Role Description: " + values[2]);
                     }
@@ -33,6 +33,34 @@ namespace DatabasesClassLibrary
                 {
                     Console.WriteLine("Role Description: Not Defined");
                 }
+                Console.WriteLine("----------------------------");
+
+            }
+        }
+        public static void printAllPermissionsInDb(List<object[]> rows)
+        {
+            Console.WriteLine("----------------------------");
+            foreach (object[] values in rows)
+            {
+                Console.WriteLine("Permission ID: " + values[0]);
+                Console.WriteLine("Permission Name: " + values[1]);
+                //Console.WriteLine(values[2].GetType().ToString());                 
+                if (values[2].GetType().ToString() != "System.DBNull")
+                {
+                    if (values[2].ToString() != "")
+                    {
+                        Console.WriteLine("Permission Description: " + values[2]);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Permission Description: Not Defined");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Permission Description: Not Defined");
+                }
+                Console.WriteLine("Role ID: " + values[3]);
                 Console.WriteLine("----------------------------");
 
             }
